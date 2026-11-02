@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { wholesaleData } from '../data/wholesaleData';
 import { Briefcase, CheckCircle2, Send, Building2, Mail, User, Phone, ShieldCheck, ArrowRight } from 'lucide-react';
+import { sendNotificationEmail, ADMIN_EMAIL } from '../services/emailService';
 
 export const WholesalePage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,10 +13,30 @@ export const WholesalePage: React.FC = () => {
     vialQuantity: '25-49',
     timeline: 'Within 2 weeks',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    await sendNotificationEmail({
+      type: 'wholesale',
+      subject: `Wholesale Inquery: ${formData.institution} (${formData.vialQuantity} vials) - ${formData.name}`,
+      senderName: formData.name,
+      senderEmail: formData.email,
+      senderPhone: formData.phone,
+      details: {
+        institution: formData.institution,
+        vialQuantityTier: formData.vialQuantity,
+        timeline: formData.timeline,
+        peptidesRequested: formData.peptidesNeeded,
+        directAdminRecipient: ADMIN_EMAIL,
+      },
+      message: formData.peptidesNeeded,
+    });
+
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -144,7 +165,7 @@ export const WholesalePage: React.FC = () => {
                 Wholesale Inquiry Received
               </h4>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                Thank you, <strong>{formData.name}</strong> from <strong>{formData.institution}</strong>. Our senior accounts director will reach out to <strong>{formData.email}</strong> within 2 business hours with formal invoicing and lot reservations.
+                Thank you, <strong>{formData.name}</strong> from <strong>{formData.institution}</strong>. Your inquiry has been routed directly to our centralized fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. Our senior accounts director will reach out to <strong>{formData.email}</strong> within 2 business hours with formal invoicing and lot reservations.
               </p>
             </div>
           ) : (
@@ -244,10 +265,11 @@ export const WholesalePage: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-bold text-sm shadow-brand hover:shadow-brand-lg transition-all flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-bold text-sm shadow-brand hover:shadow-brand-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <Send className="w-4 h-4 text-gold-300" />
-                <span>Submit Institutional Wholesale Quote Request</span>
+                <span>{isSubmitting ? 'Routing Wholesale Request...' : 'Submit Institutional Wholesale Quote Request'}</span>
               </button>
             </form>
           )}

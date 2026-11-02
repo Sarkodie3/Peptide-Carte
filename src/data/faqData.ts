@@ -53,6 +53,11 @@ export const faqData: FAQItem[] = [
   },
   {
     "category": "Orders & Inquiries",
+    "question": "What payment methods are supported?",
+    "answer": "We accept Interac e-Transfer for Canadian domestic orders, and secure Cryptocurrency payments (USDT on TRC-20, Bitcoin, or Ethereum) with an instant 5% order discount for both Canadian and international orders worldwide."
+  },
+  {
+    "category": "Orders & Inquiries",
     "question": "Do you offer wholesale and bulk research pricing?",
     "answer": "Yes. We accommodate volume research laboratories, universities, and private research institutes with tiered volume discounts starting at 10+ vials. Visit our Wholesale & Bulk Orders page to review discount schedules and submit a custom quote request."
   }

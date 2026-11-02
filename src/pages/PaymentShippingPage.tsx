@@ -121,25 +121,21 @@ export const PaymentShippingPage: React.FC<PaymentShippingProps> = ({ onNavigate
           <h3 className="font-extrabold text-slate-900 text-lg">Accepted Payment Pathways</h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs text-slate-600">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <span className="font-bold text-brand-900 text-sm block">Interac e-Transfer</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs text-slate-600">
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <span className="font-bold text-brand-900 text-sm block">Interac e-Transfer (Canada Domestic)</span>
             <p className="leading-relaxed">
-              Standard domestic settlement across Canadian financial institutions. Instant auto-deposit with order memo reference.
+              Standard domestic settlement across Canadian financial institutions. Instant auto-deposit with order memo reference. Funds are verified within minutes for rapid order fulfillment.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <span className="font-bold text-brand-900 text-sm block">Cryptocurrency (5% Off)</span>
+          <div className="p-5 rounded-2xl bg-brand-50/50 border border-brand-200 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-brand-950 text-sm block">Cryptocurrency (5% Order Discount)</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-800 text-gold-300">Fast & Global</span>
+            </div>
             <p className="leading-relaxed">
-              Preferred for international laboratories. Instant settlement in USDT (TRC-20/ERC-20), Bitcoin, or Ethereum with a 5% discount.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <span className="font-bold text-brand-900 text-sm block">Bank Wire / SWIFT / ACH</span>
-            <p className="leading-relaxed">
-              Direct institutional wire transfers supported for universities, hospitals, and volume bulk purchases worldwide.
+              Preferred for Canadian and worldwide international laboratories. Settle instantly with your choice of <strong>USDT (TRC-20)</strong>, <strong>Bitcoin (BTC)</strong>, or <strong>Ethereum (ETH)</strong> with an automatic 5% discount applied at checkout.
             </p>
           </div>
         </div>

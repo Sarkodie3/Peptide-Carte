@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart, MIN_ORDER_AMOUNT, FREE_SHIPPING_THRESHOLD } from '../context/CartContext';
 import { formatPrice } from '../utils/formatters';
+import { sendNotificationEmail, ADMIN_EMAIL } from '../services/emailService';
 import { 
   ShieldCheck, 
   Truck, 
@@ -19,12 +20,38 @@ import {
   Zap,
   DollarSign,
   Globe,
-  Check
+  Check,
+  Copy,
+  Coins
 } from 'lucide-react';
 
 interface CheckoutPageProps {
   onNavigate: (page: string, param?: string) => void;
 }
+
+export const CRYPTO_WALLETS = {
+  usdt: {
+    symbol: 'USDT',
+    name: 'USDT (Tether)',
+    network: 'TRC-20 (Tron Network - Low Fee / Fast)',
+    address: 'TX8vK2hP4mZ7bQ9jL1rE6wN3yC5tA8sD',
+    instructions: 'Send via TRC-20 for sub-minute confirmation and zero gas congestion.',
+  },
+  btc: {
+    symbol: 'BTC',
+    name: 'Bitcoin (BTC)',
+    network: 'Bitcoin Native SegWit Network',
+    address: 'bc1q8dfw7k5p2x3m9f0t1w4y7c2z5a8e0h3l6r4v9',
+    instructions: 'Send native BTC to the designated address below.',
+  },
+  eth: {
+    symbol: 'ETH',
+    name: 'Ethereum (ETH)',
+    network: 'ERC-20 (Ethereum Network)',
+    address: '0x71C8F79B62529A9f6D503b8782E06A26fA08D169',
+    instructions: 'Send standard ETH or ERC-20 assets.',
+  },
+};
 
 export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   const {
@@ -39,6 +66,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
   // Destination Region Toggle: 'canada' or 'international'
   const [destinationType, setDestinationType] = useState<'canada' | 'international'>('canada');
+
+  // Selected crypto coin if crypto payment is chosen: 'usdt' | 'btc' | 'eth'
+  const [selectedCrypto, setSelectedCrypto] = useState<'usdt' | 'btc' | 'eth'>('usdt');
+  const [copiedAddress, setCopiedAddress] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -62,7 +93,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     intlPostalCode: '',
     // Shipping & Payment Options
     shippingOption: 'standard', // 'standard' | 'priority'
-    paymentMethod: 'interac', // 'interac' | 'crypto' | 'wire'
+    paymentMethod: 'interac', // 'interac' | 'crypto'
     orderNotes: '',
     agreeToResearchTerms: false,
   });
@@ -124,6 +155,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
   const finalTotal = Math.max(0, subtotal - discountAmount + shippingCost);
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedAddress(true);
+    setTimeout(() => setCopiedAddress(false), 2000);
+  };
+
   // Minimum Order Verification ($150 CAD)
   if (!isMinOrderMet && !orderComplete) {
     return (
@@ -158,7 +195,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     );
   }
 
-  const handleSubmitOrder = (e: React.FormEvent) => {
+  const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.agreeToResearchTerms) {
       alert('Please acknowledge and agree to the Laboratory Research Use terms.');
@@ -195,8 +232,28 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       discountAmount,
       shippingCost,
       finalTotal,
+      paymentMethod: formData.paymentMethod,
+      cryptoCoin: formData.paymentMethod === 'crypto' ? selectedCrypto : null,
+      cryptoDetails: formData.paymentMethod === 'crypto' ? CRYPTO_WALLETS[selectedCrypto] : null,
       customer: { ...formData },
     };
+
+    // Dispatches automated order notification email to peptidecart0@gmail.com
+    await sendNotificationEmail({
+      type: 'order',
+      subject: `New Order ${orderNumber} (${formatPrice(finalTotal)} CAD) from ${formData.firstName} ${formData.lastName}`,
+      senderName: `${formData.firstName} ${formData.lastName}`,
+      senderEmail: formData.email,
+      senderPhone: formData.phone,
+      details: {
+        orderNumber,
+        itemsCount: cart.length,
+        itemsSummary: cart.map(i => `${i.product.name} (${i.product.dosage}) x${i.quantity} - ${formatPrice(i.product.price * i.quantity)} CAD`).join('; '),
+        finalTotal: `${formatPrice(finalTotal)} CAD`,
+        paymentMethod: formData.paymentMethod === 'crypto' ? `Crypto: ${CRYPTO_WALLETS[selectedCrypto].name}` : 'Interac e-Transfer',
+        shippingDestination: destinationAddress,
+      },
+    });
 
     setGeneratedOrder(orderData);
     setOrderComplete(true);
@@ -206,6 +263,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   // ORDER CONFIRMATION VIEW
   if (orderComplete && generatedOrder) {
     const addr = generatedOrder.destinationAddress;
+    const cryptoInfo = generatedOrder.cryptoDetails;
+
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         <div className="bg-white rounded-3xl border border-brand-100 shadow-brand p-8 sm:p-12 space-y-8">
@@ -214,13 +273,13 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              Order Confirmed & Logged for Dispatch
+              Order Confirmed & Notification Dispatched
             </span>
             <h1 className="text-3xl font-extrabold text-slate-900">
               Thank You for Your Order!
             </h1>
             <p className="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
-              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received. An itemized invoice and fulfillment tracking link has been sent to <strong>{generatedOrder.customer.email}</strong>.
+              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received. An official confirmation has been delivered to <strong>{generatedOrder.customer.email}</strong> and dispatched to our central fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>.
             </p>
           </div>
 
@@ -242,35 +301,75 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             <div className="flex items-center gap-2">
               <Lock className="w-5 h-5 text-brand-800" />
               <h3 className="font-bold text-base text-brand-950">
-                Payment Instructions: {generatedOrder.customer.paymentMethod === 'interac' ? 'Interac e-Transfer' : generatedOrder.customer.paymentMethod === 'crypto' ? 'Cryptocurrency' : 'Bank Wire / ACH'}
+                Payment Instructions: {generatedOrder.customer.paymentMethod === 'interac' ? 'Interac e-Transfer' : `Cryptocurrency (${cryptoInfo?.name || 'USDT'})`}
               </h3>
             </div>
 
+            {/* INTERAC E-TRANSFER VIEW */}
             {generatedOrder.customer.paymentMethod === 'interac' && (
-              <div className="space-y-2 text-xs text-brand-900 leading-relaxed">
+              <div className="space-y-3 text-xs text-brand-900 leading-relaxed">
                 <p>Please send an Interac e-Transfer for <strong className="font-mono text-sm">{formatPrice(generatedOrder.finalTotal)} CAD</strong> to our automated fulfillment deposit recipient:</p>
-                <div className="p-3 bg-white rounded-xl border border-brand-200 font-mono text-xs space-y-1">
-                  <p>Recipient Email: <strong>payments@peptidecart.is</strong></p>
-                  <p>Message / Memo: <strong>{generatedOrder.orderNumber}</strong></p>
+                <div className="p-4 bg-white rounded-xl border border-brand-200 font-mono text-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span>Recipient Email: <strong>payments@peptidecart.is</strong></span>
+                    <button
+                      onClick={() => copyToClipboard('payments@peptidecart.is')}
+                      className="text-[11px] font-sans font-bold text-brand-800 hover:underline flex items-center gap-1"
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>Copy</span>
+                    </button>
+                  </div>
+                  <p>Message / Order Memo: <strong>{generatedOrder.orderNumber}</strong></p>
                   <p>Security Answer (if required): <strong>peptide2026</strong></p>
                 </div>
-                <p className="text-[11px] text-slate-500">Orders are queued for packing and courier handoff immediately upon e-Transfer auto-deposit confirmation.</p>
+                <p className="text-[11px] text-slate-500">Orders are queued for packaging and courier handoff immediately upon e-Transfer confirmation.</p>
               </div>
             )}
 
-            {generatedOrder.customer.paymentMethod === 'crypto' && (
-              <div className="space-y-2 text-xs text-brand-900 leading-relaxed">
-                <p>Cryptocurrency checkout active. Please remit the equivalent of <strong className="font-mono text-sm">{formatPrice(generatedOrder.finalTotal)} CAD</strong> in USDT (TRC-20 / ERC-20) or Bitcoin:</p>
-                <div className="p-3 bg-white rounded-xl border border-brand-200 font-mono text-xs break-all">
-                  <p>USDT (TRC-20): <strong>TX8vK2hP4mZ7bQ9jL1rE6wN3yC5tA8sD</strong></p>
-                  <p className="mt-1">Order Memo: <strong>{generatedOrder.orderNumber}</strong></p>
+            {/* CRYPTO VIEW (USDT / BTC / ETH) */}
+            {generatedOrder.customer.paymentMethod === 'crypto' && cryptoInfo && (
+              <div className="space-y-3 text-xs text-brand-900 leading-relaxed">
+                <p>
+                  Please send the equivalent of <strong className="font-mono text-sm">{formatPrice(generatedOrder.finalTotal)} CAD</strong> in <strong>{cryptoInfo.name}</strong> to the designated research address below:
+                </p>
+
+                <div className="p-4 bg-white rounded-xl border border-brand-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase text-slate-500">
+                      Network: <strong className="text-brand-900">{cryptoInfo.network}</strong>
+                    </span>
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">
+                      5% Discount Applied
+                    </span>
+                  </div>
+
+                  <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 flex items-center justify-between gap-2">
+                    <span className="font-mono text-xs break-all font-bold text-slate-900 select-all">
+                      {cryptoInfo.address}
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(cryptoInfo.address)}
+                      className="bg-brand-800 hover:bg-brand-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors flex-shrink-0"
+                    >
+                      {copiedAddress ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-gold-400" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy Address</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <p className="text-[11px] text-slate-500">
+                    <strong>Memo / Reference:</strong> Include <code className="bg-slate-100 px-1.5 py-0.5 rounded text-brand-900 font-mono font-bold">{generatedOrder.orderNumber}</code> or reply to confirmation email with transaction TXID.
+                  </p>
                 </div>
-              </div>
-            )}
-
-            {generatedOrder.customer.paymentMethod === 'wire' && (
-              <div className="space-y-2 text-xs text-brand-900 leading-relaxed">
-                <p>Institutional invoice details have been dispatched to <strong>{generatedOrder.customer.email}</strong> with full banking SWIFT / IBAN routing instructions.</p>
               </div>
             )}
           </div>
@@ -363,7 +462,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             Checkout & Order Dispatch
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Serving Canadian laboratories & International researchers worldwide • Min Order $150.00 CAD
+            Canadian Domestic & Worldwide Delivery • Min. Order $150.00 CAD
           </p>
         </div>
 
@@ -470,11 +569,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 type="button"
                 onClick={() => {
                   setDestinationType('canada');
-                  if (formData.paymentMethod === 'crypto') {
-                    // keep
-                  } else {
-                    setFormData({ ...formData, paymentMethod: 'interac' });
-                  }
+                  setFormData({ ...formData, paymentMethod: 'interac' });
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${
                   destinationType === 'canada'
@@ -502,9 +597,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 type="button"
                 onClick={() => {
                   setDestinationType('international');
-                  if (formData.paymentMethod === 'interac') {
-                    setFormData({ ...formData, paymentMethod: 'crypto' });
-                  }
+                  setFormData({ ...formData, paymentMethod: 'crypto' });
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${
                   destinationType === 'international'
@@ -529,9 +622,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               </button>
             </div>
 
-            {/* ========================================================================= */}
-            {/* SUBSECTION A: CANADIAN SHIPPING ADDRESS                                    */}
-            {/* ========================================================================= */}
+            {/* SUBSECTION A: CANADIAN SHIPPING ADDRESS */}
             {destinationType === 'canada' && (
               <div className="p-5 rounded-2xl bg-brand-50/40 border border-brand-100 space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 text-xs font-bold text-brand-900">
@@ -604,9 +695,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               </div>
             )}
 
-            {/* ========================================================================= */}
-            {/* SUBSECTION B: OTHER / INTERNATIONAL SHIPPING ADDRESS                       */}
-            {/* ========================================================================= */}
+            {/* SUBSECTION B: OTHER / INTERNATIONAL SHIPPING ADDRESS */}
             {destinationType === 'international' && (
               <div className="p-5 rounded-2xl bg-purple-50/40 border border-brand-200 space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 text-xs font-bold text-brand-900">
@@ -695,7 +784,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             )}
           </div>
 
-          {/* Section 3: Shipping Method (Adapts based on destination) */}
+          {/* Section 3: Shipping Method */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
               <Truck className="w-4 h-4 text-brand-800" />
@@ -817,16 +906,17 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Section 4: Payment Method */}
+          {/* Section 4: Payment Method (Interac & Crypto with USDT / BTC / ETH selector) */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
               <DollarSign className="w-4 h-4 text-brand-800" />
               <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">
-                4. Payment Method
+                4. Payment Method Selection
               </h2>
             </div>
 
-            <div className="space-y-2 text-xs">
+            <div className="space-y-3 text-xs">
+              {/* Option A: Interac e-Transfer (Canada) */}
               {destinationType === 'canada' && (
                 <label
                   className={`flex items-start justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
@@ -847,7 +937,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                     <div>
                       <span className="font-bold text-slate-900 block">Interac e-Transfer (Canada Direct)</span>
                       <span className="text-slate-500 text-[11px] leading-relaxed">
-                        Instant Canadian bank settlement. Payment instructions and memo generated on checkout confirmation.
+                        Direct domestic Canadian bank deposit. Instant confirmation with reference memo.
                       </span>
                     </div>
                   </div>
@@ -857,58 +947,102 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 </label>
               )}
 
-              <label
-                className={`flex items-start justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+              {/* Option B: Cryptocurrency with USDT, BTC, ETH selection */}
+              <div
+                className={`p-4 rounded-2xl border transition-all ${
                   formData.paymentMethod === 'crypto'
                     ? 'border-brand-800 bg-brand-50/50 shadow-sm'
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                <div className="flex items-start gap-3">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="crypto"
-                    checked={formData.paymentMethod === 'crypto'}
-                    onChange={() => setFormData({ ...formData, paymentMethod: 'crypto' })}
-                    className="mt-1 text-brand-800 focus:ring-brand-700"
-                  />
-                  <div>
-                    <span className="font-bold text-slate-900 block">Cryptocurrency (USDT / BTC / ETH)</span>
-                    <span className="text-slate-500 text-[11px] leading-relaxed">
-                      Instant worldwide settlement. Highly recommended for international researchers. Includes 5% discount.
-                    </span>
+                <label className="flex items-start justify-between cursor-pointer">
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="crypto"
+                      checked={formData.paymentMethod === 'crypto'}
+                      onChange={() => setFormData({ ...formData, paymentMethod: 'crypto' })}
+                      className="mt-1 text-brand-800 focus:ring-brand-700"
+                    />
+                    <div>
+                      <span className="font-bold text-slate-900 block">Cryptocurrency (USDT / BTC / ETH)</span>
+                      <span className="text-slate-500 text-[11px] leading-relaxed">
+                        Instant global settlement with 5% research discount. Choose your preferred coin below.
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <span className="text-[10px] bg-gold-100 text-gold-900 font-bold px-2 py-0.5 rounded uppercase">
-                  5% Off Worldwide
-                </span>
-              </label>
+                  <span className="text-[10px] bg-gold-100 text-gold-900 font-bold px-2 py-0.5 rounded uppercase flex-shrink-0">
+                    5% Off Worldwide
+                  </span>
+                </label>
 
-              <label
-                className={`flex items-start justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                  formData.paymentMethod === 'wire'
-                    ? 'border-brand-800 bg-brand-50/50 shadow-sm'
-                    : 'border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="wire"
-                    checked={formData.paymentMethod === 'wire'}
-                    onChange={() => setFormData({ ...formData, paymentMethod: 'wire' })}
-                    className="mt-1 text-brand-800 focus:ring-brand-700"
-                  />
-                  <div>
-                    <span className="font-bold text-slate-900 block">Institutional Bank Wire / SWIFT Transfer</span>
-                    <span className="text-slate-500 text-[11px] leading-relaxed">
-                      For universities, research institutes, and commercial bulk orders worldwide.
+                {/* Sub-selector for USDT, BTC, ETH */}
+                {formData.paymentMethod === 'crypto' && (
+                  <div className="mt-4 pt-4 border-t border-brand-200/60 space-y-3 animate-in fade-in duration-200">
+                    <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide block">
+                      Select Cryptocurrency Coin:
                     </span>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCrypto('usdt')}
+                        className={`p-3 rounded-xl border text-center transition-all ${
+                          selectedCrypto === 'usdt'
+                            ? 'bg-brand-800 text-white border-brand-800 font-bold shadow-sm'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold">USDT</span>
+                        <span className="text-[10px] block opacity-80">TRC-20</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCrypto('btc')}
+                        className={`p-3 rounded-xl border text-center transition-all ${
+                          selectedCrypto === 'btc'
+                            ? 'bg-brand-800 text-white border-brand-800 font-bold shadow-sm'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold">BTC</span>
+                        <span className="text-[10px] block opacity-80">Bitcoin</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCrypto('eth')}
+                        className={`p-3 rounded-xl border text-center transition-all ${
+                          selectedCrypto === 'eth'
+                            ? 'bg-brand-800 text-white border-brand-800 font-bold shadow-sm'
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold">ETH</span>
+                        <span className="text-[10px] block opacity-80">Ethereum</span>
+                      </button>
+                    </div>
+
+                    {/* Active Coin Preview Box */}
+                    <div className="p-3 bg-white rounded-xl border border-slate-200 text-xs space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900">{CRYPTO_WALLETS[selectedCrypto].name}</span>
+                        <span className="text-[10px] font-mono text-brand-800 bg-brand-50 px-2 py-0.5 rounded font-semibold">
+                          {CRYPTO_WALLETS[selectedCrypto].network}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500">
+                        {CRYPTO_WALLETS[selectedCrypto].instructions}
+                      </p>
+                      <div className="bg-slate-50 p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700 break-all select-all flex items-center justify-between">
+                        <span>{CRYPTO_WALLETS[selectedCrypto].address}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </label>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -1015,7 +1149,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             </button>
 
             <p className="text-[10px] text-slate-400 text-center">
-              Canadian domestic hubs & international express air courier with cold-pack protection.
+              A copy of this order will be routed to <strong className="text-slate-600">{ADMIN_EMAIL}</strong> for immediate lot fulfillment.
             </p>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Product } from '../../types/product';
 import { formatPrice } from '../../utils/formatters';
 import { X, CheckCircle2, ShieldAlert, Send, Building2, Mail, User, Hash } from 'lucide-react';
+import { sendNotificationEmail, ADMIN_EMAIL } from '../../services/emailService';
 
 interface QuoteModalProps {
   product: Product | null;
@@ -19,12 +20,32 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
   const [institution, setInstitution] = useState('');
   const [quantity, setQuantity] = useState<number>(5);
   const [notes, setNotes] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   if (!isOpen || !product) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    await sendNotificationEmail({
+      type: 'quote',
+      subject: `Formal Quote Request: ${quantity}x ${product.name} (${product.sku}) - ${institution}`,
+      senderName: name,
+      senderEmail: email,
+      details: {
+        productName: product.name,
+        sku: product.sku,
+        dosage: product.dosage,
+        unitPrice: `${formatPrice(product.price)} CAD`,
+        quantity,
+        institution,
+      },
+      message: notes,
+    });
+
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -72,7 +93,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
               Inquiry Registered Successfully
             </h4>
             <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-              Thank you, <strong>{name}</strong>. A laboratory sales specialist will review your request for <strong>{quantity} vials</strong> of {product.name} and deliver an official quotation and batch COA package to <strong>{email}</strong> within 1–2 business hours.
+              Thank you, <strong>{name}</strong>. Your inquiry has been routed directly to our fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. A laboratory sales specialist will review your request for <strong>{quantity} vials</strong> of {product.name} and deliver an official quotation and batch COA package to <strong>{email}</strong> within 1–2 business hours.
             </p>
             <div className="p-3 bg-brand-50 rounded-xl text-xs text-brand-900 border border-brand-100">
               Reference Inquiry ID: <strong className="font-mono">REQ-{Math.floor(100000 + Math.random() * 900000)}</strong>
@@ -171,10 +192,11 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-bold text-sm shadow-brand transition-all flex items-center justify-center gap-2"
+              disabled={isSubmitting}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-bold text-sm shadow-brand transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Send className="w-4 h-4 text-gold-300" />
-              <span>Submit Formal Research Quotation Request</span>
+              <span>{isSubmitting ? 'Submitting Quotation Request...' : 'Submit Formal Research Quotation Request'}</span>
             </button>
           </form>
         )}
