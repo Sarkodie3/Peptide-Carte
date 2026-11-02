@@ -8,18 +8,23 @@ export interface FAQItem {
 export const faqData: FAQItem[] = [
   {
     "category": "Shipping & Fulfillment",
-    "question": "Do you ship directly from Canada?",
-    "answer": "Yes. All orders ship directly from our domestic Canadian fulfillment facilities. This ensures expedited transit times, reliable tracking, and eliminates any international customs inspections or import delays for Canadian researchers."
+    "question": "Do you ship internationally outside of Canada?",
+    "answer": "Yes! While our primary fulfillment infrastructure is located in Canada, we dispatch analytical research compounds worldwide to laboratories, academic institutions, and verified researchers in the United States, United Kingdom, European Union, Australia, and select global research destinations via expedited international tracked couriers (DHL Express, FedEx International, and UPS)."
   },
   {
     "category": "Shipping & Fulfillment",
-    "question": "Do you offer same-day shipping?",
-    "answer": "Yes. Research orders verified before 1:00 PM EST on standard business days (Monday through Friday) are generally processed and dispatched the same day via Express tracked delivery."
+    "question": "Do you ship domestically within Canada?",
+    "answer": "Yes. Canadian orders ship domestically with zero customs inspection delays, arriving in 2 to 5 business days via tracked express courier."
   },
   {
     "category": "Shipping & Fulfillment",
-    "question": "What is the typical transit time?",
-    "answer": "Standard Express Shipping within Canada typically takes 2 to 5 business days depending on province. Major metropolitan centers often receive deliveries in 2 business days."
+    "question": "What is the typical transit time for international orders?",
+    "answer": "International express shipments to the United States typically arrive within 3 to 5 business days. Shipments to the UK, Europe, Australia, and other global destinations generally arrive in 4 to 7 business days with end-to-end tracking."
+  },
+  {
+    "category": "Shipping & Fulfillment",
+    "question": "How are international shipments packaged for transit stability?",
+    "answer": "All peptides are shipped in freeze-dried (lyophilized) state in light-shielded, vacuum-sealed, shatter-resistant vials. For long-distance international transit, vials are packed with thermal insulation and cold-packs to ensure complete biochemical stability."
   },
   {
     "category": "Product Quality & Verification",
@@ -29,12 +34,17 @@ export const faqData: FAQItem[] = [
   {
     "category": "Product Quality & Verification",
     "question": "How should lyophilized peptides be stored upon receipt?",
-    "answer": "Unopened, lyophilized peptide vials should be stored frozen at -20\u00b0C in a dry, dark environment to maintain maximal stability for up to 24-36 months. Once reconstituted with bacteriostatic water, vials should be refrigerated at 2\u00b0C to 8\u00b0C and utilized within the recommended stability period."
+    "answer": "Unopened, lyophilized peptide vials should be stored frozen at -20°C in a dry, dark environment to maintain maximal stability for up to 24-36 months. Once reconstituted with bacteriostatic water, vials should be refrigerated at 2°C to 8°C and utilized within the recommended stability period."
   },
   {
     "category": "Product Quality & Verification",
     "question": "Do you offer a satisfaction guarantee?",
     "answer": "We back our purity claims with a 50-day quality guarantee. If an independent laboratory analysis of an unopened batch demonstrates substandard purity compared to published COA specifications, our support team will provide an immediate resolution."
+  },
+  {
+    "category": "Orders & Inquiries",
+    "question": "Is there a minimum order requirement?",
+    "answer": "Yes. Peptide Cart maintains a minimum order requirement of $150.00 CAD across all domestic and international shipments to maintain dedicated packaging and priority cold-chain courier handling."
   },
   {
     "category": "Orders & Inquiries",

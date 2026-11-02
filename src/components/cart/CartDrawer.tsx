@@ -14,7 +14,7 @@ import {
   Tag, 
   Truck, 
   Sparkles,
-  AlertCircle
+  Globe
 } from 'lucide-react';
 
 interface CartDrawerProps {
@@ -57,8 +57,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     if (res.success) setCouponInput('');
   };
 
-  const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : 15.0;
-  const estimatedTotal = Math.max(0, subtotal - discountAmount + shippingCost);
+  const estimatedShipping = subtotal >= FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : 15.0;
+  const estimatedTotal = Math.max(0, subtotal - discountAmount + estimatedShipping);
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -85,7 +85,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     {totalItems} {totalItems === 1 ? 'item' : 'items'}
                   </span>
                 </h3>
-                <p className="text-[11px] text-purple-200">Domestic Canadian Express Delivery</p>
+                <p className="text-[11px] text-purple-200 flex items-center gap-1">
+                  <Globe className="w-3 h-3 text-gold-400" />
+                  <span>Canada Domestic & Worldwide Express</span>
+                </p>
               </div>
             </div>
 
@@ -308,7 +311,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {discountAmount > 0 && (
-                  <div className="flex justify-between text-emerald-700 font-medium">
+                  <div className="flex justify-between text-emerald-700 font-semibold">
                     <span>Discount ({appliedCoupon})</span>
                     <span className="font-mono">-{formatPrice(discountAmount)}</span>
                   </div>
@@ -317,21 +320,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="flex justify-between items-center">
                   <span className="flex items-center gap-1">
                     <Truck className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Canadian Express Shipping</span>
+                    <span>Estimated Shipping</span>
                   </span>
-                  <span className="font-mono font-medium">
-                    {shippingCost === 0 ? (
-                      <span className="text-emerald-700 font-bold uppercase text-[11px]">Free</span>
+                  <span className="font-mono font-medium text-slate-700">
+                    {subtotal >= FREE_SHIPPING_THRESHOLD ? (
+                      <span className="text-emerald-700 font-bold uppercase text-[11px]">Free Canada / Calculated at Checkout</span>
                     ) : (
-                      formatPrice(shippingCost)
+                      'Calculated at Checkout'
                     )}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-200">
-                  <span>Estimated Total</span>
+                  <span>Subtotal</span>
                   <span className="font-mono text-brand-950 text-lg">
-                    {formatPrice(estimatedTotal)} CAD
+                    {formatPrice(Math.max(0, subtotal - discountAmount))} CAD
                   </span>
                 </div>
               </div>
@@ -362,7 +365,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 {isMinOrderMet ? (
                   <>
                     <Sparkles className="w-4 h-4 text-gold-400" />
-                    <span>Proceed to Checkout ({formatPrice(estimatedTotal)})</span>
+                    <span>Proceed to Address & Checkout</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 ) : (

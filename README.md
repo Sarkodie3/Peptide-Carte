@@ -9,7 +9,7 @@ Official web platform and laboratory catalog for **Peptide Cart**, a premier Can
 ### 1. High-Purity In-Vitro Research Catalog
 - **56 Analytical Reference Compounds**: Comprehensive product inventory encompassing GLP-1 sequences (*Tirzepatide, Semaglutide, Retatrutide, Cagrilintide*), cellular & tissue repair peptides (*BPC-157, TB-500, GLOW, KLOW, GHK-Cu, NAD+, Epithalon, MOTS-c*), and sterile reconstitution supplies (*Bacteriostatic Water*).
 - **Quality & Specifications**: Detailed molecular mass, physical form, appearance, storage conditions (-20°C dry), lot numbers, and HPLC verification standards (≥ 99.0% purity).
-- **Canadian Domestic Logistics**: Dispatched directly from Canadian fulfillment facilities in temperature-monitored, light-shielded packaging with express 2–5 business day delivery across all provinces.
+- **Domestic & International Logistics**: Dispatched from Canadian distribution hubs with express 2–5 business day delivery across all Canadian provinces, alongside expedited worldwide international courier shipping (DHL Express / FedEx Priority) to the United States, Europe, Australia, and select global research destinations.
 
 ### 2. Interactive Peptide Reconstitution Calculator
 - **Laboratory Calibration Engine**: Computes exact diluent ratios, solution concentrations (mcg/mL and mg/mL), and syringe units.
@@ -29,10 +29,11 @@ Official web platform and laboratory catalog for **Peptide Cart**, a premier Can
 - **Enforced Minimum Order Threshold**: Automatic validation enforcing a minimum purchase subtotal of **$150.00 CAD** before checkout access is permitted, featuring an interactive progress bar and dynamic shortfall calculation.
 - **Discount & Logistics Calculator**: Integrated promotional coupon engine (e.g. `RESEARCH10` for 10% off, `BULK15` for 10+ items) and automated free domestic Canadian shipping on orders exceeding $200 CAD.
 
-### 5. Institutional & Client Checkout Workflow
-- **Multi-Option Canadian Dispatch**: Standard Express Tracked (2–5 business days) and Priority Cold-Chain Overnight Air options.
-- **Domestic Settlement Channels**: Interac e-Transfer automated payment memos, direct institutional bank wire / ACH, and cryptocurrency with automated lot allocation.
-- **Itemized Confirmation Receipts**: Automated order identifier generation (e.g. `#PC-89241`) with itemized invoices and cold-chain dispatch guides.
+### 5. Multi-Region Checkout Architecture (Canada & International Sections)
+- **Dedicated Canadian Shipping Section**: Specialized province selector (13 provinces & territories) with domestic postal code validation and local courier tracking (Canada Post Xpresspost / Purolator Express).
+- **Dedicated International Shipping Section**: Worldwide destination country routing (United States, UK, EU, Australia, etc.) with international customs declarations and thermal vacuum air transport.
+- **Adaptive Courier & Settlement Channels**: Standard vs. Priority cold-chain overnight options, Interac e-Transfer for Canadian bank holders, global cryptocurrency (5% discount), and international SWIFT wire transfers.
+- **Itemized Confirmation Receipts**: Automated order identifier generation (e.g. `#PC-89241`) with itemized invoices and destination-specific dispatch guides.
 
 ### 6. Institutional Ordering & Wholesale Workflow
 - **Tiered Volume Savings**: Programmatic discounts for academic institutions and research laboratories:

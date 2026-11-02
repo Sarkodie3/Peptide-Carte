@@ -20,7 +20,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             About Peptide Cart
           </h1>
           <p className="text-sm text-purple-200/80 leading-relaxed">
-            Advancing biomedical research through uncompromising synthesis standards, open chromatographic verification, and reliable Canadian distribution.
+            Advancing biomedical research through uncompromising synthesis standards, open chromatographic verification, and reliable domestic Canadian & international distribution.
           </p>
         </div>
       </div>
@@ -32,7 +32,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             Our Purpose & Scientific Philosophy
           </h2>
           <p>
-            At <strong>Peptide Cart</strong>, we set out with a clear, uncompromising mission: to make high-quality, verified research peptides accessible, transparent, and completely reliable for North American laboratories and researchers.
+            At <strong>Peptide Cart</strong>, we set out with a clear, uncompromising mission: to make high-quality, verified research peptides accessible, transparent, and completely reliable for laboratories and researchers across Canada, the United States, and worldwide.
           </p>
           <p>
             What began as an analytical, science-driven initiative has matured into a trusted repository for university departments, biochemical investigators, and biotechnology facilities. In an emerging industry where purity claims are too often unverified, we distinguish ourselves by publishing complete, third-party HPLC and Mass Spectrometry records for every single batch we distribute.

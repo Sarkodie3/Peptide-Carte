@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Menu, X, FileText, Calculator, ShoppingBag } from 'lucide-react';
+import { Search, Menu, X, FileText, Calculator, ShoppingBag, Globe } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../utils/formatters';
 
@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'shop', label: 'Shop', badge: '56 Items' },
     { id: 'calculator', label: 'Peptide Calculator', icon: Calculator, highlight: true },
     { id: 'lab-results', label: 'Lab Results / COAs', icon: FileText },
-    { id: 'wholesale', label: 'Wholesale' },
+    { id: 'wholesale', label: 'Wholesale & Bulk' },
     { id: 'faq', label: 'FAQ' },
     { id: 'about', label: 'About' },
     { id: 'contact', label: 'Contact' },
@@ -54,11 +54,11 @@ export const Header: React.FC<HeaderProps> = ({
                   PEPTIDE<span className="text-brand-800">CART</span>
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold-100 text-gold-800 border border-gold-300">
-                  CA
+                  Global
                 </span>
               </div>
               <p className="text-[10px] font-medium tracking-widest text-slate-500 uppercase -mt-1">
-                Analytical Research Grade
+                Canada & Worldwide Laboratory Supply
               </p>
             </div>
           </button>

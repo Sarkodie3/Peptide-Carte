@@ -59,7 +59,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100/80 border border-brand-200/60 text-brand-900 text-xs font-semibold shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Third-Party HPLC Batch Verified • Ships From Canada</span>
+                <span>Third-Party HPLC Batch Verified • Canada Domestic & Worldwide Dispatch</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.12]">
@@ -70,7 +70,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Your premier Canadian destination for verified research peptides, GLP sequences, and laboratory reconstitution reagents. Fully backed by independent HPLC analytical reports and express domestic delivery.
+                Your premier laboratory destination for verified research peptides, GLP sequences, and biochemical reconstitution reagents. Fully backed by independent HPLC analytical reports with domestic Canadian fulfillment and worldwide express air delivery.
               </p>
 
               {/* Action Buttons */}
@@ -100,8 +100,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <span className="text-[11px] text-slate-500 font-medium">HPLC Purity Minimum</span>
                 </div>
                 <div className="p-3 rounded-xl bg-white/80 border border-slate-200/80 shadow-sm">
-                  <span className="font-extrabold text-base text-brand-950 block">🇨🇦 Canada</span>
-                  <span className="text-[11px] text-slate-500 font-medium">Domestic Express Dispatch</span>
+                  <span className="font-extrabold text-base text-brand-950 block">🇨🇦 & 🌍</span>
+                  <span className="text-[11px] text-slate-500 font-medium">Domestic & Global Courier</span>
                 </div>
                 <div className="p-3 rounded-xl bg-white/80 border border-slate-200/80 shadow-sm">
                   <span className="font-extrabold text-base text-brand-950 block">37 COAs</span>

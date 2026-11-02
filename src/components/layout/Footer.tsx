@@ -92,9 +92,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <Truck className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="font-bold text-white text-base">Domestic Canadian Dispatch</h4>
+              <h4 className="font-bold text-white text-base">Canada & Global Express Dispatch</h4>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Discreet, temperature-conscious packaging dispatched directly from Canadian centers. Zero customs holds.
+                Discreet, temperature-conscious packaging dispatched across Canadian provinces and worldwide via DHL / FedEx International Priority.
               </p>
             </div>
           </div>
@@ -128,11 +128,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Your trusted Canadian source for analytical research peptides, GLP sequences, and laboratory reconstitution accessories. Transparent science, verified purity, and rapid domestic delivery.
+              Your trusted laboratory source for analytical research peptides, GLP sequences, and laboratory reconstitution accessories. Transparent science, verified purity, and domestic Canada & international delivery.
             </p>
             <div className="text-xs text-slate-400 space-y-1">
               <p>Email: <a href="mailto:support@peptidecart.is" className="text-gold-400 hover:underline">support@peptidecart.is</a></p>
-              <p>Location: Fulfillment Hubs across Canada</p>
+              <p>Location: Fulfillment Hubs in Canada • Global Air Dispatch</p>
             </div>
           </div>
 

@@ -5,7 +5,6 @@ import {
   ShieldCheck, 
   Truck, 
   Lock, 
-  CreditCard, 
   CheckCircle2, 
   ArrowLeft, 
   Building2, 
@@ -18,7 +17,9 @@ import {
   AlertTriangle,
   Send,
   Zap,
-  DollarSign
+  DollarSign,
+  Globe,
+  Check
 } from 'lucide-react';
 
 interface CheckoutPageProps {
@@ -36,6 +37,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     clearCart,
   } = useCart();
 
+  // Destination Region Toggle: 'canada' or 'international'
+  const [destinationType, setDestinationType] = useState<'canada' | 'international'>('canada');
+
   // Form State
   const [formData, setFormData] = useState({
     email: '',
@@ -43,11 +47,20 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     firstName: '',
     lastName: '',
     organization: '',
-    address: '',
-    suite: '',
-    city: '',
-    province: 'ON',
-    postalCode: '',
+    // Canadian Address Fields
+    caAddress: '',
+    caSuite: '',
+    caCity: '',
+    caProvince: 'ON',
+    caPostalCode: '',
+    // International Address Fields
+    intlCountry: 'United States',
+    intlAddress: '',
+    intlSuite: '',
+    intlCity: '',
+    intlState: '',
+    intlPostalCode: '',
+    // Shipping & Payment Options
     shippingOption: 'standard', // 'standard' | 'priority'
     paymentMethod: 'interac', // 'interac' | 'crypto' | 'wire'
     orderNotes: '',
@@ -74,12 +87,44 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     { code: 'YT', name: 'Yukon' },
   ];
 
-  // Shipping cost calculation
-  const baseShippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 15.0;
-  const shippingCost = formData.shippingOption === 'priority' ? baseShippingCost + 15.0 : baseShippingCost;
+  // International Countries
+  const internationalCountries = [
+    'United States',
+    'United Kingdom',
+    'Australia',
+    'Germany',
+    'France',
+    'Switzerland',
+    'Netherlands',
+    'Italy',
+    'Spain',
+    'Sweden',
+    'Norway',
+    'Denmark',
+    'Ireland',
+    'New Zealand',
+    'Belgium',
+    'Austria',
+    'Japan',
+    'Singapore',
+    'South Korea',
+    'Other International Destination',
+  ];
+
+  // Dynamic Shipping Calculation based on Region
+  let shippingCost = 15.0;
+  if (destinationType === 'canada') {
+    const base = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 15.0;
+    shippingCost = formData.shippingOption === 'priority' ? base + 15.0 : base;
+  } else {
+    // International shipping rates
+    const baseIntl = subtotal >= 250.0 ? 20.0 : 35.0;
+    shippingCost = formData.shippingOption === 'priority' ? baseIntl + 20.0 : baseIntl;
+  }
+
   const finalTotal = Math.max(0, subtotal - discountAmount + shippingCost);
 
-  // If cart is empty or minimum order requirement ($150) is not met:
+  // Minimum Order Verification ($150 CAD)
   if (!isMinOrderMet && !orderComplete) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-6">
@@ -92,12 +137,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             Minimum Order Requirement: $150.00 CAD
           </h2>
           <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-            Peptide Cart requires a minimum subtotal of <strong>$150.00 CAD</strong> for all analytical research shipments. Your current cart subtotal is <strong>{formatPrice(subtotal)} CAD</strong>.
+            Peptide Cart requires a minimum purchase of <strong>$150.00 CAD</strong> across all domestic and international shipments to maintain dedicated packaging and priority courier handling.
           </p>
         </div>
 
         <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 max-w-md mx-auto text-xs text-amber-900 font-medium">
-          Add at least <strong>{formatPrice(remainingForMinOrder)} CAD</strong> more in compounds or supplies to proceed to checkout.
+          Your current subtotal is <strong>{formatPrice(subtotal)} CAD</strong>. Add at least <strong>{formatPrice(remainingForMinOrder)} CAD</strong> more to unlock checkout.
         </div>
 
         <div className="pt-2 flex justify-center gap-3">
@@ -121,9 +166,30 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     }
 
     const orderNumber = `PC-${Math.floor(100000 + Math.random() * 900000)}`;
+    const destinationAddress =
+      destinationType === 'canada'
+        ? {
+            country: 'Canada',
+            address: formData.caAddress,
+            suite: formData.caSuite,
+            city: formData.caCity,
+            stateProvince: formData.caProvince,
+            postalCode: formData.caPostalCode,
+          }
+        : {
+            country: formData.intlCountry,
+            address: formData.intlAddress,
+            suite: formData.intlSuite,
+            city: formData.intlCity,
+            stateProvince: formData.intlState,
+            postalCode: formData.intlPostalCode,
+          };
+
     const orderData = {
       orderNumber,
       date: new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }),
+      destinationType,
+      destinationAddress,
       items: [...cart],
       subtotal,
       discountAmount,
@@ -139,6 +205,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
   // ORDER CONFIRMATION VIEW
   if (orderComplete && generatedOrder) {
+    const addr = generatedOrder.destinationAddress;
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         <div className="bg-white rounded-3xl border border-brand-100 shadow-brand p-8 sm:p-12 space-y-8">
@@ -147,14 +214,27 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              Order Confirmed & Logged
+              Order Confirmed & Logged for Dispatch
             </span>
             <h1 className="text-3xl font-extrabold text-slate-900">
               Thank You for Your Order!
             </h1>
             <p className="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
-              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been registered. An itemized invoice and fulfillment tracking link has been sent to <strong>{generatedOrder.customer.email}</strong>.
+              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received. An itemized invoice and fulfillment tracking link has been sent to <strong>{generatedOrder.customer.email}</strong>.
             </p>
+          </div>
+
+          {/* Delivery Destination Snapshot */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span className="font-bold text-slate-700 block">Shipping Destination:</span>
+              <span className="text-slate-900 font-semibold">
+                {addr.address} {addr.suite ? `(${addr.suite})` : ''}, {addr.city}, {addr.stateProvince} {addr.postalCode}, <strong className="text-brand-900 font-extrabold">{addr.country}</strong>
+              </span>
+            </div>
+            <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-brand-100 text-brand-800 uppercase tracking-wider self-start sm:self-auto">
+              {generatedOrder.destinationType === 'canada' ? '🇨🇦 Domestic Canadian Courier' : '🌍 International Express Air'}
+            </span>
           </div>
 
           {/* Payment Instructions Banner */}
@@ -190,7 +270,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
             {generatedOrder.customer.paymentMethod === 'wire' && (
               <div className="space-y-2 text-xs text-brand-900 leading-relaxed">
-                <p>Institutional invoice details have been dispatched to <strong>{generatedOrder.customer.email}</strong> with full banking routing instructions.</p>
+                <p>Institutional invoice details have been dispatched to <strong>{generatedOrder.customer.email}</strong> with full banking SWIFT / IBAN routing instructions.</p>
               </div>
             )}
           </div>
@@ -234,7 +314,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   </div>
                 )}
                 <div className="flex justify-between text-slate-600">
-                  <span>Shipping</span>
+                  <span>Shipping ({generatedOrder.destinationType === 'canada' ? 'Canada Express' : 'International Express'})</span>
                   <span className="font-mono">{generatedOrder.shippingCost === 0 ? 'FREE' : formatPrice(generatedOrder.shippingCost)}</span>
                 </div>
                 <div className="flex justify-between text-base font-extrabold text-brand-950 pt-2 border-t border-slate-200">
@@ -283,7 +363,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             Checkout & Order Dispatch
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Verified domestic Canadian research delivery • Minimum Order $150.00 CAD
+            Serving Canadian laboratories & International researchers worldwide • Min Order $150.00 CAD
           </p>
         </div>
 
@@ -293,7 +373,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Main Checkout Grid */}
+      {/* Main Checkout Form */}
       <form onSubmit={handleSubmitOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Column: Form Fields */}
@@ -342,7 +422,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="awright@bioresearch.ca"
+                  placeholder="awright@bioresearch.com"
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
                 />
               </div>
@@ -366,147 +446,374 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 type="text"
                 value={formData.organization}
                 onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                placeholder="University Biochemistry Dept / Analytical Lab"
+                placeholder="University Department / Analytical Research Facility"
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
               />
             </div>
           </div>
 
-          {/* Section 2: Canadian Shipping Address */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-              <MapPin className="w-4 h-4 text-brand-800" />
-              <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">
-                2. Canadian Shipping Address
-              </h2>
-            </div>
-
-            <div className="text-xs">
-              <label className="font-bold text-slate-700 block mb-1">Street Address *</label>
-              <input
-                type="text"
-                required
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="100 University Avenue"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Suite / Unit / Lab</label>
-                <input
-                  type="text"
-                  value={formData.suite}
-                  onChange={(e) => setFormData({ ...formData, suite: e.target.value })}
-                  placeholder="Lab Suite 402"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
-                />
+          {/* Section 2: SEPARATE SHIPPING ADDRESS SECTIONS (Canadian vs. Other / International) */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-brand-800" />
+                <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">
+                  2. Shipping Destination Address
+                </h2>
               </div>
-
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">City *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.city}
-                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  placeholder="Toronto"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Province *</label>
-                <select
-                  value={formData.province}
-                  onChange={(e) => setFormData({ ...formData, province: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none font-medium cursor-pointer"
-                >
-                  {provinces.map((prov) => (
-                    <option key={prov.code} value={prov.code}>
-                      {prov.name} ({prov.code})
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <span className="text-[11px] text-slate-400">Select destination region below</span>
             </div>
 
-            <div className="text-xs">
-              <label className="font-bold text-slate-700 block mb-1">Postal Code *</label>
-              <input
-                type="text"
-                required
-                value={formData.postalCode}
-                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value.toUpperCase() })}
-                placeholder="M5J 2T3"
-                className="w-full sm:w-1/2 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono focus:ring-2 focus:ring-brand-700 focus:outline-none"
-              />
+            {/* Destination Region Toggle Pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setDestinationType('canada');
+                  if (formData.paymentMethod === 'crypto') {
+                    // keep
+                  } else {
+                    setFormData({ ...formData, paymentMethod: 'interac' });
+                  }
+                }}
+                className={`p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${
+                  destinationType === 'canada'
+                    ? 'border-brand-800 bg-brand-50/70 shadow-sm ring-1 ring-brand-800'
+                    : 'border-slate-200 hover:bg-slate-50 bg-white'
+                }`}
+              >
+                <span className="text-2xl">🇨🇦</span>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-slate-900 text-xs sm:text-sm">
+                      Canadian Shipping Address
+                    </span>
+                    {destinationType === 'canada' && (
+                      <Check className="w-3.5 h-3.5 text-brand-800" />
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Domestic Canadian delivery (Free on orders $200+ CAD)
+                  </p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setDestinationType('international');
+                  if (formData.paymentMethod === 'interac') {
+                    setFormData({ ...formData, paymentMethod: 'crypto' });
+                  }
+                }}
+                className={`p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${
+                  destinationType === 'international'
+                    ? 'border-brand-800 bg-brand-50/70 shadow-sm ring-1 ring-brand-800'
+                    : 'border-slate-200 hover:bg-slate-50 bg-white'
+                }`}
+              >
+                <span className="text-2xl">🌍</span>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-slate-900 text-xs sm:text-sm">
+                      Other / International Address
+                    </span>
+                    {destinationType === 'international' && (
+                      <Check className="w-3.5 h-3.5 text-brand-800" />
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    United States & Worldwide (DHL / FedEx Express)
+                  </p>
+                </div>
+              </button>
             </div>
+
+            {/* ========================================================================= */}
+            {/* SUBSECTION A: CANADIAN SHIPPING ADDRESS                                    */}
+            {/* ========================================================================= */}
+            {destinationType === 'canada' && (
+              <div className="p-5 rounded-2xl bg-brand-50/40 border border-brand-100 space-y-4 animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 text-xs font-bold text-brand-900">
+                  <span>🇨🇦 Canadian Domestic Shipping Details</span>
+                </div>
+
+                <div className="text-xs">
+                  <label className="font-bold text-slate-700 block mb-1">Street Address *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.caAddress}
+                    onChange={(e) => setFormData({ ...formData, caAddress: e.target.value })}
+                    placeholder="100 University Avenue"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">Suite / Unit / Lab</label>
+                    <input
+                      type="text"
+                      value={formData.caSuite}
+                      onChange={(e) => setFormData({ ...formData, caSuite: e.target.value })}
+                      placeholder="Suite 402"
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">City *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.caCity}
+                      onChange={(e) => setFormData({ ...formData, caCity: e.target.value })}
+                      placeholder="Toronto"
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">Province *</label>
+                    <select
+                      value={formData.caProvince}
+                      onChange={(e) => setFormData({ ...formData, caProvince: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none font-medium cursor-pointer"
+                    >
+                      {provinces.map((prov) => (
+                        <option key={prov.code} value={prov.code}>
+                          {prov.name} ({prov.code})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="text-xs">
+                  <label className="font-bold text-slate-700 block mb-1">Canadian Postal Code *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.caPostalCode}
+                    onChange={(e) => setFormData({ ...formData, caPostalCode: e.target.value.toUpperCase() })}
+                    placeholder="M5J 2T3"
+                    className="w-full sm:w-1/2 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl uppercase font-mono focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* ========================================================================= */}
+            {/* SUBSECTION B: OTHER / INTERNATIONAL SHIPPING ADDRESS                       */}
+            {/* ========================================================================= */}
+            {destinationType === 'international' && (
+              <div className="p-5 rounded-2xl bg-purple-50/40 border border-brand-200 space-y-4 animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 text-xs font-bold text-brand-900">
+                  <Globe className="w-4 h-4 text-brand-800" />
+                  <span>🌍 International & Worldwide Shipping Details</span>
+                </div>
+
+                <div className="text-xs">
+                  <label className="font-bold text-slate-700 block mb-1">Destination Country / Region *</label>
+                  <select
+                    value={formData.intlCountry}
+                    onChange={(e) => setFormData({ ...formData, intlCountry: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none font-medium cursor-pointer"
+                  >
+                    {internationalCountries.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="text-xs">
+                  <label className="font-bold text-slate-700 block mb-1">Street Address *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.intlAddress}
+                    onChange={(e) => setFormData({ ...formData, intlAddress: e.target.value })}
+                    placeholder="450 Research Parkway"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">Suite / Lab / Department</label>
+                    <input
+                      type="text"
+                      value={formData.intlSuite}
+                      onChange={(e) => setFormData({ ...formData, intlSuite: e.target.value })}
+                      placeholder="Building B, Rm 310"
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">City *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.intlCity}
+                      onChange={(e) => setFormData({ ...formData, intlCity: e.target.value })}
+                      placeholder="Boston"
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">State / Province / Region *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.intlState}
+                      onChange={(e) => setFormData({ ...formData, intlState: e.target.value })}
+                      placeholder="MA / California / England"
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="text-xs">
+                  <label className="font-bold text-slate-700 block mb-1">Postal / ZIP Code *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.intlPostalCode}
+                    onChange={(e) => setFormData({ ...formData, intlPostalCode: e.target.value })}
+                    placeholder="02115"
+                    className="w-full sm:w-1/2 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl font-mono focus:ring-2 focus:ring-brand-700 focus:outline-none"
+                  />
+                </div>
+
+                <p className="text-[11px] text-slate-500 pt-1">
+                  * All international packages are packed with vacuum thermal insulation to ensure stability across air cargo handling.
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Section 3: Shipping Method */}
+          {/* Section 3: Shipping Method (Adapts based on destination) */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
               <Truck className="w-4 h-4 text-brand-800" />
               <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">
-                3. Shipping Option
+                3. Shipping Courier Option ({destinationType === 'canada' ? 'Domestic Canada' : 'International Worldwide'})
               </h2>
             </div>
 
             <div className="space-y-2 text-xs">
-              <label
-                className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                  formData.shippingOption === 'standard'
-                    ? 'border-brand-800 bg-brand-50/50 shadow-sm'
-                    : 'border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="shippingOption"
-                    value="standard"
-                    checked={formData.shippingOption === 'standard'}
-                    onChange={() => setFormData({ ...formData, shippingOption: 'standard' })}
-                    className="text-brand-800 focus:ring-brand-700"
-                  />
-                  <div>
-                    <span className="font-bold text-slate-900 block">Express Tracked Domestic Courier</span>
-                    <span className="text-slate-500 text-[11px]">2–5 business days across Canada</span>
-                  </div>
-                </div>
-                <span className="font-mono font-bold text-brand-950">
-                  {baseShippingCost === 0 ? 'FREE ($200+ Order)' : '$15.00 CAD'}
-                </span>
-              </label>
+              {destinationType === 'canada' ? (
+                <>
+                  <label
+                    className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+                      formData.shippingOption === 'standard'
+                        ? 'border-brand-800 bg-brand-50/50 shadow-sm'
+                        : 'border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="radio"
+                        name="shippingOption"
+                        value="standard"
+                        checked={formData.shippingOption === 'standard'}
+                        onChange={() => setFormData({ ...formData, shippingOption: 'standard' })}
+                        className="text-brand-800 focus:ring-brand-700"
+                      />
+                      <div>
+                        <span className="font-bold text-slate-900 block">Canada Post Xpresspost / Purolator Express</span>
+                        <span className="text-slate-500 text-[11px]">2–5 business days across Canadian provinces</span>
+                      </div>
+                    </div>
+                    <span className="font-mono font-bold text-brand-950">
+                      {subtotal >= FREE_SHIPPING_THRESHOLD ? 'FREE ($200+ Order)' : '$15.00 CAD'}
+                    </span>
+                  </label>
 
-              <label
-                className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                  formData.shippingOption === 'priority'
-                    ? 'border-brand-800 bg-brand-50/50 shadow-sm'
-                    : 'border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="shippingOption"
-                    value="priority"
-                    checked={formData.shippingOption === 'priority'}
-                    onChange={() => setFormData({ ...formData, shippingOption: 'priority' })}
-                    className="text-brand-800 focus:ring-brand-700"
-                  />
-                  <div>
-                    <span className="font-bold text-slate-900 block">Priority Cold-Chain Overnight Air</span>
-                    <span className="text-slate-500 text-[11px]">1–2 business days guaranteed priority handling</span>
-                  </div>
-                </div>
-                <span className="font-mono font-bold text-brand-950">
-                  {baseShippingCost === 0 ? '$15.00 CAD' : '$30.00 CAD'}
-                </span>
-              </label>
+                  <label
+                    className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+                      formData.shippingOption === 'priority'
+                        ? 'border-brand-800 bg-brand-50/50 shadow-sm'
+                        : 'border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="radio"
+                        name="shippingOption"
+                        value="priority"
+                        checked={formData.shippingOption === 'priority'}
+                        onChange={() => setFormData({ ...formData, shippingOption: 'priority' })}
+                        className="text-brand-800 focus:ring-brand-700"
+                      />
+                      <div>
+                        <span className="font-bold text-slate-900 block">Priority Cold-Chain Overnight Air</span>
+                        <span className="text-slate-500 text-[11px]">1–2 business days guaranteed temperature control</span>
+                      </div>
+                    </div>
+                    <span className="font-mono font-bold text-brand-950">
+                      {subtotal >= FREE_SHIPPING_THRESHOLD ? '$15.00 CAD' : '$30.00 CAD'}
+                    </span>
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label
+                    className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+                      formData.shippingOption === 'standard'
+                        ? 'border-brand-800 bg-brand-50/50 shadow-sm'
+                        : 'border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="radio"
+                        name="shippingOption"
+                        value="standard"
+                        checked={formData.shippingOption === 'standard'}
+                        onChange={() => setFormData({ ...formData, shippingOption: 'standard' })}
+                        className="text-brand-800 focus:ring-brand-700"
+                      />
+                      <div>
+                        <span className="font-bold text-slate-900 block">International Tracked Express (DHL / FedEx)</span>
+                        <span className="text-slate-500 text-[11px]">3–6 business days with door-to-door tracking</span>
+                      </div>
+                    </div>
+                    <span className="font-mono font-bold text-brand-950">
+                      {subtotal >= 250.0 ? '$20.00 CAD (Discounted)' : '$35.00 CAD'}
+                    </span>
+                  </label>
+
+                  <label
+                    className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+                      formData.shippingOption === 'priority'
+                        ? 'border-brand-800 bg-brand-50/50 shadow-sm'
+                        : 'border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="radio"
+                        name="shippingOption"
+                        value="priority"
+                        checked={formData.shippingOption === 'priority'}
+                        onChange={() => setFormData({ ...formData, shippingOption: 'priority' })}
+                        className="text-brand-800 focus:ring-brand-700"
+                      />
+                      <div>
+                        <span className="font-bold text-slate-900 block">International Priority Cold-Chain Air</span>
+                        <span className="text-slate-500 text-[11px]">2–4 business days guaranteed insulated priority transit</span>
+                      </div>
+                    </div>
+                    <span className="font-mono font-bold text-brand-950">
+                      {subtotal >= 250.0 ? '$40.00 CAD' : '$55.00 CAD'}
+                    </span>
+                  </label>
+                </>
+              )}
             </div>
           </div>
 
@@ -520,33 +827,35 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             </div>
 
             <div className="space-y-2 text-xs">
-              <label
-                className={`flex items-start justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                  formData.paymentMethod === 'interac'
-                    ? 'border-brand-800 bg-brand-50/50 shadow-sm'
-                    : 'border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="interac"
-                    checked={formData.paymentMethod === 'interac'}
-                    onChange={() => setFormData({ ...formData, paymentMethod: 'interac' })}
-                    className="mt-1 text-brand-800 focus:ring-brand-700"
-                  />
-                  <div>
-                    <span className="font-bold text-slate-900 block">Interac e-Transfer (Canada Direct)</span>
-                    <span className="text-slate-500 text-[11px] leading-relaxed">
-                      Instant Canadian bank transfer. Payment details and recipient email provided upon checkout completion.
-                    </span>
+              {destinationType === 'canada' && (
+                <label
+                  className={`flex items-start justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
+                    formData.paymentMethod === 'interac'
+                      ? 'border-brand-800 bg-brand-50/50 shadow-sm'
+                      : 'border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="interac"
+                      checked={formData.paymentMethod === 'interac'}
+                      onChange={() => setFormData({ ...formData, paymentMethod: 'interac' })}
+                      className="mt-1 text-brand-800 focus:ring-brand-700"
+                    />
+                    <div>
+                      <span className="font-bold text-slate-900 block">Interac e-Transfer (Canada Direct)</span>
+                      <span className="text-slate-500 text-[11px] leading-relaxed">
+                        Instant Canadian bank settlement. Payment instructions and memo generated on checkout confirmation.
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded uppercase">
-                  Fastest
-                </span>
-              </label>
+                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded uppercase">
+                    Canada Preferred
+                  </span>
+                </label>
+              )}
 
               <label
                 className={`flex items-start justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
@@ -567,12 +876,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   <div>
                     <span className="font-bold text-slate-900 block">Cryptocurrency (USDT / BTC / ETH)</span>
                     <span className="text-slate-500 text-[11px] leading-relaxed">
-                      Autonomous confidential settlement. Remittance address provided on final confirmation.
+                      Instant worldwide settlement. Highly recommended for international researchers. Includes 5% discount.
                     </span>
                   </div>
                 </div>
                 <span className="text-[10px] bg-gold-100 text-gold-900 font-bold px-2 py-0.5 rounded uppercase">
-                  5% Off
+                  5% Off Worldwide
                 </span>
               </label>
 
@@ -593,9 +902,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                     className="mt-1 text-brand-800 focus:ring-brand-700"
                   />
                   <div>
-                    <span className="font-bold text-slate-900 block">Institutional Bank Wire / ACH Transfer</span>
+                    <span className="font-bold text-slate-900 block">Institutional Bank Wire / SWIFT Transfer</span>
                     <span className="text-slate-500 text-[11px] leading-relaxed">
-                      Recommended for university purchase orders and bulk orders exceeding $1,000 CAD.
+                      For universities, research institutes, and commercial bulk orders worldwide.
                     </span>
                   </div>
                 </div>
@@ -612,8 +921,16 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               <span className="text-xs text-brand-800 font-semibold">{cart.length} unique items</span>
             </h2>
 
+            {/* Destination Pill Badge */}
+            <div className="p-3 bg-brand-50 rounded-xl border border-brand-100 flex items-center justify-between text-xs">
+              <span className="text-slate-600">Selected Destination:</span>
+              <span className="font-bold text-brand-900">
+                {destinationType === 'canada' ? '🇨🇦 Canada' : `🌍 ${formData.intlCountry}`}
+              </span>
+            </div>
+
             {/* Items list snippet */}
-            <div className="max-h-60 overflow-y-auto space-y-3 pr-1">
+            <div className="max-h-56 overflow-y-auto space-y-3 pr-1">
               {cart.map((item) => (
                 <div key={item.product.id} className="flex items-center gap-3 text-xs">
                   <div className="w-12 h-12 rounded-lg bg-slate-50 border border-slate-100 p-1 flex-shrink-0 flex items-center justify-center">
@@ -645,7 +962,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               )}
 
               <div className="flex justify-between">
-                <span>Estimated Shipping</span>
+                <span>
+                  Estimated Shipping ({destinationType === 'canada' ? 'Canada' : 'International'})
+                </span>
                 <span className="font-mono font-medium">
                   {shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}
                 </span>
@@ -696,7 +1015,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             </button>
 
             <p className="text-[10px] text-slate-400 text-center">
-              All orders dispatched from domestic Canadian hubs with vacuum cold-chain protection.
+              Canadian domestic hubs & international express air courier with cold-pack protection.
             </p>
           </div>
         </div>

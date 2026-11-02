@@ -75,7 +75,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
             Research Peptides & Reconstitution Catalogue
           </h1>
           <p className="text-sm text-purple-200/80 leading-relaxed">
-            All 56 verified compounds synthesized to ≥ 99.0% analytical purity. Dispatched domestically across Canada in temperature-monitored, light-protected packaging.
+            All 56 verified compounds synthesized to ≥ 99.0% analytical purity. Dispatched domestically across Canada and internationally worldwide in temperature-monitored, light-protected packaging.
           </p>
         </div>
       </div>

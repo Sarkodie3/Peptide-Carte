@@ -1,5 +1,5 @@
 import React from 'react';
-import { Truck, ShieldCheck, Award, Lock, ShoppingBag } from 'lucide-react';
+import { Truck, ShieldCheck, Award, Lock, ShoppingBag, Globe } from 'lucide-react';
 
 export const TopBanner: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ export const TopBanner: React.FC = () => {
         <div className="flex items-center gap-4 mx-auto md:mx-0 flex-wrap justify-center text-[11px] md:text-xs">
           <span className="flex items-center gap-1.5 font-medium text-purple-200">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            🇨🇦 Ships Directly From Canada — No Customs Delays
+            🇨🇦 Canada Domestic & 🌍 Worldwide International Shipping
           </span>
           <span className="hidden sm:inline-block text-brand-400">•</span>
           <span className="hidden sm:flex items-center gap-1.5 text-gold-300 font-semibold">
@@ -23,13 +23,13 @@ export const TopBanner: React.FC = () => {
           <span className="hidden xl:inline-block text-brand-400">•</span>
           <span className="hidden xl:flex items-center gap-1.5 text-purple-200">
             <Truck className="w-3.5 h-3.5 text-gold-400" />
-            Free Express Delivery on Orders $200+
+            Express Dispatch with End-to-End Tracking
           </span>
         </div>
         <div className="hidden md:flex items-center gap-3 text-gold-300 font-medium">
           <span className="flex items-center gap-1">
             <Lock className="w-3 h-3 text-gold-400" />
-            Secure Verification
+            Global Research Verification
           </span>
           <span className="text-brand-500">|</span>
           <span className="text-purple-300">Currency: <strong className="text-white">CAD ($)</strong></span>

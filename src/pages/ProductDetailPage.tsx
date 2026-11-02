@@ -108,7 +108,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="grid grid-cols-2 gap-3 w-full mt-4 text-[11px] text-slate-600">
               <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2">
                 <Truck className="w-4 h-4 text-brand-700 flex-shrink-0" />
-                <span>Express Canada Delivery</span>
+                <span>Canada & Global Delivery</span>
               </div>
               <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
