@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../types/product';
 import { products } from '../data/productsData';
 import { labResults } from '../data/labResultsData';
 import { formatPrice } from '../utils/formatters';
+import { useCart } from '../context/CartContext';
 import { ProductCard } from '../components/common/ProductCard';
 import { 
   ShieldCheck, 
@@ -11,11 +12,14 @@ import {
   ExternalLink, 
   ArrowLeft, 
   CheckCircle2, 
-  FileText, 
   Calculator, 
   AlertTriangle,
   Beaker,
-  Send,
+  ShoppingBag,
+  Plus,
+  Minus,
+  Check,
+  Zap,
   Lock
 } from 'lucide-react';
 
@@ -23,15 +27,18 @@ interface ProductDetailPageProps {
   product: Product;
   onBack: () => void;
   onNavigate: (page: string, param?: string) => void;
-  onRequestQuote: (product: Product) => void;
+  onRequestQuote?: (product: Product) => void;
 }
 
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   product,
   onBack,
   onNavigate,
-  onRequestQuote,
 }) => {
+  const { addToCart, setIsCartOpen } = useCart();
+  const [quantity, setQuantity] = useState<number>(1);
+  const [justAdded, setJustAdded] = useState(false);
+
   // Find matching lab report
   const matchedCOA = labResults.find(
     (lr) =>
@@ -44,6 +51,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const related = products
     .filter((p) => p.id !== product.id && (p.category === product.category || p.tags.includes('Best Sellers')))
     .slice(0, 4);
+
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 2000);
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    onNavigate('checkout');
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
@@ -69,6 +87,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       {/* Main Product Showcase Card */}
       <div className="bg-white rounded-3xl border border-brand-100 shadow-brand p-6 sm:p-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          
           {/* Left Column: Image Box */}
           <div className="lg:col-span-5 flex flex-col items-center">
             <div className="w-full aspect-square max-w-md rounded-2xl bg-gradient-to-b from-brand-50/30 to-slate-50 p-6 flex items-center justify-center border border-slate-200/80 relative overflow-hidden group">
@@ -89,7 +108,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="grid grid-cols-2 gap-3 w-full mt-4 text-[11px] text-slate-600">
               <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2">
                 <Truck className="w-4 h-4 text-brand-700 flex-shrink-0" />
-                <span>Express Canada Dispatch</span>
+                <span>Express Canada Delivery</span>
               </div>
               <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
@@ -98,7 +117,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Details & Quote Trigger */}
+          {/* Right Column: Details & Purchase / Cart Box */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
@@ -109,7 +128,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   {product.dosage}
                 </span>
                 {matchedCOA && (
-                  <span className="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                     <span>COA: {matchedCOA.purity}</span>
                   </span>
@@ -132,42 +151,85 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 )}
                 <span className="text-xs text-slate-500 font-medium">CAD / Reference Vial</span>
               </div>
+
+              <p className="text-xs text-slate-600 leading-relaxed pt-1">
+                {product.shortDescription}
+              </p>
             </div>
 
-            {/* Non-Transactional Quote CTA Box */}
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-brand-900 to-brand-950 text-white shadow-brand space-y-4">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h4 className="font-bold text-base text-white">
-                    Request Research Quotation
-                  </h4>
-                  <p className="text-xs text-purple-200 mt-0.5">
-                    Order processing operates as an institutional inquiry workflow. Direct retail card checkout is disabled for compliance.
-                  </p>
+            {/* Add to Cart & Checkout Controls Box */}
+            <div className="p-6 rounded-3xl bg-slate-50 border border-brand-100 space-y-4 shadow-sm">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {/* Quantity selector */}
+                <div className="flex items-center border border-slate-300 bg-white rounded-xl overflow-hidden shadow-sm h-12 w-full sm:w-36 justify-between px-2">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="p-2 text-slate-600 hover:text-brand-900 transition-colors"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="font-extrabold text-base text-slate-900 font-mono">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="p-2 text-slate-600 hover:text-brand-900 transition-colors"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
                 </div>
-                <Lock className="w-5 h-5 text-gold-400 flex-shrink-0" />
+
+                {/* Primary Add to Cart Button */}
+                <button
+                  onClick={handleAddToCart}
+                  className={`flex-1 w-full h-12 rounded-xl font-bold text-sm transition-all shadow-brand flex items-center justify-center gap-2 transform hover:-translate-y-0.5 cursor-pointer ${
+                    justAdded
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white'
+                  }`}
+                >
+                  {justAdded ? (
+                    <>
+                      <Check className="w-4 h-4 text-white" />
+                      <span>Added to Cart!</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="w-4 h-4 text-gold-300" />
+                      <span>Add to Cart ({formatPrice(product.price * quantity)})</span>
+                    </>
+                  )}
+                </button>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-1">
+              {/* Fast Checkout & Calculator Buttons */}
+              <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
                 <button
-                  onClick={() => onRequestQuote(product)}
-                  className="flex-1 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-brand-950 font-extrabold py-3.5 px-6 rounded-xl text-sm transition-all shadow-gold flex items-center justify-center gap-2 transform hover:-translate-y-0.5"
+                  onClick={handleBuyNow}
+                  className="flex-1 py-3 px-4 rounded-xl bg-gold-500 hover:bg-gold-400 text-brand-950 font-bold text-xs shadow-gold transition-all flex items-center justify-center gap-1.5"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Request Laboratory Quote</span>
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>Direct Checkout ({formatPrice(product.price * quantity)})</span>
                 </button>
+
                 <button
                   onClick={() => onNavigate('calculator')}
-                  className="bg-white/10 hover:bg-white/20 text-white font-bold py-3.5 px-5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+                  className="py-3 px-4 rounded-xl bg-white hover:bg-brand-50 border border-slate-200 text-brand-900 font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                 >
-                  <Calculator className="w-4 h-4 text-gold-400" />
-                  <span>Reconstitution Calculator</span>
+                  <Calculator className="w-3.5 h-3.5 text-brand-700" />
+                  <span>Reconstitution Tool</span>
                 </button>
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-purple-300 pt-1 border-t border-brand-800">
-                <span>Standard Dispatch: 2–5 Business Days (Canada)</span>
-                <span>Bulk Savings: Up to 25% for 10+ Vials</span>
+              {/* Minimum Order Limit Notice */}
+              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-200">
+                <span className="flex items-center gap-1 text-brand-900 font-semibold">
+                  <Lock className="w-3.5 h-3.5 text-brand-700" />
+                  Minimum Order: $150.00 CAD
+                </span>
+                <span>Free Express Shipping at $200+ CAD</span>
               </div>
             </div>
 
@@ -260,7 +322,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 key={rel.id}
                 product={rel}
                 onSelect={(p) => onNavigate('product', p.slug)}
-                onRequestQuote={onRequestQuote}
               />
             ))}
           </div>

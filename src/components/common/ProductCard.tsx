@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../../types/product';
 import { formatPrice } from '../../utils/formatters';
-import { ShieldCheck, ArrowRight, Eye, CheckCircle2 } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import { ShieldCheck, Eye, ShoppingBag, Check } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
   onSelect: (product: Product) => void;
-  onRequestQuote: (product: Product) => void;
+  onRequestQuote?: (product: Product) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onSelect,
-  onRequestQuote,
 }) => {
+  const { addToCart } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
+
+  const handleAdd = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addToCart(product, 1);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1800);
+  };
+
   return (
     <div className="group bg-white rounded-2xl border border-brand-100/80 shadow-sm hover:shadow-brand-lg transition-all duration-300 flex flex-col overflow-hidden hover:-translate-y-1">
       {/* Card Header & Badges */}
@@ -47,7 +57,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             loading="lazy"
             className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
-              // Fallback to high quality vector if remote image fails
               (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80';
             }}
           />
@@ -84,7 +93,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </p>
         </div>
 
-        {/* Price & Action */}
+        {/* Price & Add to Cart Action */}
         <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-2">
           <div>
             <div className="flex items-baseline gap-1.5">
@@ -105,17 +114,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => onSelect(product)}
-              className="p-2 rounded-xl text-slate-600 hover:text-brand-900 hover:bg-brand-50 border border-slate-200 transition-colors"
-              title="View full laboratory data"
+              className="p-2 rounded-xl text-slate-500 hover:text-brand-900 hover:bg-brand-50 border border-slate-200 transition-colors"
+              title="View technical specifications"
             >
               <Eye className="w-4 h-4" />
             </button>
+            
+            {/* Primary Add to Cart Button */}
             <button
-              onClick={() => onRequestQuote(product)}
-              className="bg-brand-800 hover:bg-brand-900 text-white font-semibold text-xs px-3.5 py-2 rounded-xl shadow-sm hover:shadow-brand transition-all flex items-center gap-1.5"
+              onClick={handleAdd}
+              className={`font-bold text-xs px-3.5 py-2 rounded-xl shadow-sm transition-all flex items-center gap-1.5 ${
+                justAdded
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-brand-800 hover:bg-brand-900 text-white hover:shadow-brand transform hover:-translate-y-0.5'
+              }`}
+              title="Add to Research Cart"
             >
-              <span>Quote</span>
-              <ArrowRight className="w-3.5 h-3.5 text-gold-300" />
+              {justAdded ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-white" />
+                  <span>Added</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-3.5 h-3.5 text-gold-300" />
+                  <span>Add to Cart</span>
+                </>
+              )}
             </button>
           </div>
         </div>

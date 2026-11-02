@@ -1,5 +1,7 @@
 import React from 'react';
 import { Home, ShoppingBag, Calculator, FileText, Briefcase, HelpCircle, Info, Mail, Search, ShieldAlert, X } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import { formatPrice } from '../../utils/formatters';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -16,6 +18,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   onNavigate,
   onOpenSearch,
 }) => {
+  const { totalItems, subtotal, setIsCartOpen } = useCart();
+
   if (!isOpen) return null;
 
   const links = [
@@ -58,6 +62,25 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
           >
             <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Cart Quick Action in Mobile Drawer */}
+        <div className="p-3 border-b border-slate-100 bg-brand-50/30">
+          <button
+            onClick={() => {
+              onClose();
+              setIsCartOpen(true);
+            }}
+            className="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-brand-800 hover:bg-brand-900 text-white font-bold text-xs shadow-brand transition-all"
+          >
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4 text-gold-400" />
+              <span>View Cart ({totalItems})</span>
+            </div>
+            <span className="font-mono text-gold-300">
+              {formatPrice(subtotal)} CAD
+            </span>
           </button>
         </div>
 
@@ -112,7 +135,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           <div className="flex items-start gap-2 text-slate-600">
             <ShieldAlert className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
             <p className="text-[11px] leading-relaxed">
-              <strong>Research Use Only:</strong> All products are intended solely for qualified laboratory and in-vitro research.
+              <strong>Minimum Order:</strong> $150.00 CAD. Intended exclusively for qualified laboratory research.
             </p>
           </div>
           <p className="text-[10px] text-slate-400 text-center pt-2">

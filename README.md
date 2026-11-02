@@ -24,7 +24,17 @@ Official web platform and laboratory catalog for **Peptide Cart**, a premier Can
 - **37 Third-Party HPLC Reports**: Direct access to verified Certificates of Analysis tested independently by **HYTE Research Division**.
 - **Chromatographic Transparency**: Search by compound or lot batch identifier (e.g. `PE2#00004`, `PE2#00007`) to verify purity percentages (99.1% – 99.84%) and inspect official analytical certificates.
 
-### 4. Institutional Ordering & Wholesale Workflow
+### 4. Shopping Cart & Minimum Order Engine ($150 CAD)
+- **Interactive Cart Drawer**: Real-time slide-out cart with quantity controls, product previews, and instant subtotal calculation.
+- **Enforced Minimum Order Threshold**: Automatic validation enforcing a minimum purchase subtotal of **$150.00 CAD** before checkout access is permitted, featuring an interactive progress bar and dynamic shortfall calculation.
+- **Discount & Logistics Calculator**: Integrated promotional coupon engine (e.g. `RESEARCH10` for 10% off, `BULK15` for 10+ items) and automated free domestic Canadian shipping on orders exceeding $200 CAD.
+
+### 5. Institutional & Client Checkout Workflow
+- **Multi-Option Canadian Dispatch**: Standard Express Tracked (2–5 business days) and Priority Cold-Chain Overnight Air options.
+- **Domestic Settlement Channels**: Interac e-Transfer automated payment memos, direct institutional bank wire / ACH, and cryptocurrency with automated lot allocation.
+- **Itemized Confirmation Receipts**: Automated order identifier generation (e.g. `#PC-89241`) with itemized invoices and cold-chain dispatch guides.
+
+### 6. Institutional Ordering & Wholesale Workflow
 - **Tiered Volume Savings**: Programmatic discounts for academic institutions and research laboratories:
   - **Tier 1 (10–24 Vials)**: 15% Savings with free express shipping.
   - **Tier 2 (25–49 Vials)**: 25% Savings with dedicated account coordination.

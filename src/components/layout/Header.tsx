@@ -1,5 +1,7 @@
 import React from 'react';
-import { Search, Menu, X, FileText, Calculator, Sparkles } from 'lucide-react';
+import { Search, Menu, X, FileText, Calculator, ShoppingBag } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import { formatPrice } from '../../utils/formatters';
 
 interface HeaderProps {
   currentPage: string;
@@ -16,6 +18,8 @@ export const Header: React.FC<HeaderProps> = ({
   mobileMenuOpen,
   setMobileMenuOpen,
 }) => {
+  const { totalItems, subtotal, setIsCartOpen } = useCart();
+
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'shop', label: 'Shop', badge: '56 Items' },
@@ -39,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-900 via-brand-800 to-brand-700 flex items-center justify-center shadow-brand text-gold-400 group-hover:scale-105 transition-transform duration-200 border border-brand-600/30">
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0" />
+                <path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 0 1 1-4 0" />
                 <circle cx="12" cy="15" r="1.5" fill="#C9A962" stroke="none" />
                 <path d="M10 12h4" stroke="#C9A962" />
               </svg>
@@ -90,11 +94,12 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right Actions: Search + Quote Request + Mobile Hamburger */}
+          {/* Right Actions: Search + Cart Trigger + Mobile Hamburger */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Search Trigger */}
             <button
               onClick={onOpenSearch}
-              className="p-2 sm:px-3 sm:py-2 rounded-lg text-slate-600 hover:text-brand-900 hover:bg-brand-50 transition-colors flex items-center gap-2 border border-slate-200 text-xs sm:text-sm font-medium"
+              className="p-2 sm:px-3 sm:py-2 rounded-xl text-slate-600 hover:text-brand-900 hover:bg-brand-50 transition-colors flex items-center gap-2 border border-slate-200 text-xs sm:text-sm font-medium"
               title="Search catalog & lab reports"
               aria-label="Search catalog & lab reports"
             >
@@ -105,12 +110,20 @@ export const Header: React.FC<HeaderProps> = ({
               </kbd>
             </button>
 
+            {/* Shopping Cart Button */}
             <button
-              onClick={() => onNavigate('shop')}
-              className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-brand hover:shadow-brand-lg transition-all duration-200 transform hover:-translate-y-0.5 border border-brand-700/50"
+              onClick={() => setIsCartOpen(true)}
+              className="relative flex items-center gap-2 bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-brand hover:shadow-brand-lg transition-all transform hover:-translate-y-0.5 border border-brand-700/60 group"
+              title="View Research Cart"
             >
-              <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-              <span>Catalog</span>
+              <ShoppingBag className="w-4 h-4 text-gold-400 group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline">Cart</span>
+              
+              {totalItems > 0 && (
+                <span className="bg-gold-500 text-brand-950 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center -ml-0.5 shadow-sm">
+                  {totalItems}
+                </span>
+              )}
             </button>
 
             {/* Mobile Hamburger Button */}

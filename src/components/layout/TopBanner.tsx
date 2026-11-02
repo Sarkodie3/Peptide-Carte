@@ -1,5 +1,5 @@
 import React from 'react';
-import { Truck, ShieldCheck, Award, Lock } from 'lucide-react';
+import { Truck, ShieldCheck, Award, Lock, ShoppingBag } from 'lucide-react';
 
 export const TopBanner: React.FC = () => {
   return (
@@ -11,20 +11,25 @@ export const TopBanner: React.FC = () => {
             🇨🇦 Ships Directly From Canada — No Customs Delays
           </span>
           <span className="hidden sm:inline-block text-brand-400">•</span>
-          <span className="hidden sm:flex items-center gap-1.5 text-purple-200">
-            <ShieldCheck className="w-3.5 h-3.5 text-gold-400" />
-            HPLC Third-Party Verified (≥ 99% Purity)
+          <span className="hidden sm:flex items-center gap-1.5 text-gold-300 font-semibold">
+            <ShoppingBag className="w-3.5 h-3.5 text-gold-400" />
+            Minimum Order: $150.00 CAD
           </span>
           <span className="hidden lg:inline-block text-brand-400">•</span>
           <span className="hidden lg:flex items-center gap-1.5 text-purple-200">
-            <Award className="w-3.5 h-3.5 text-gold-400" />
-            50-Day Quality Assurance Guarantee
+            <ShieldCheck className="w-3.5 h-3.5 text-gold-400" />
+            HPLC Third-Party Verified (≥ 99% Purity)
+          </span>
+          <span className="hidden xl:inline-block text-brand-400">•</span>
+          <span className="hidden xl:flex items-center gap-1.5 text-purple-200">
+            <Truck className="w-3.5 h-3.5 text-gold-400" />
+            Free Express Delivery on Orders $200+
           </span>
         </div>
         <div className="hidden md:flex items-center gap-3 text-gold-300 font-medium">
           <span className="flex items-center gap-1">
             <Lock className="w-3 h-3 text-gold-400" />
-            Encrypted Inquiries
+            Secure Verification
           </span>
           <span className="text-brand-500">|</span>
           <span className="text-purple-300">Currency: <strong className="text-white">CAD ($)</strong></span>

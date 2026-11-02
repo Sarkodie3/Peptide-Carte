@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { CartProvider } from './context/CartContext';
 import { TopBanner } from './components/layout/TopBanner';
 import { Header } from './components/layout/Header';
 import { MobileNav } from './components/layout/MobileNav';
 import { Footer } from './components/layout/Footer';
 import { ComplianceModal } from './components/layout/ComplianceModal';
 import { SearchModal } from './components/common/SearchModal';
+import { CartDrawer } from './components/cart/CartDrawer';
 import { QuoteModal } from './components/common/QuoteModal';
 
 // Pages
 import { HomePage } from './pages/HomePage';
 import { ShopPage } from './pages/ShopPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 import { CalculatorPage } from './pages/CalculatorPage';
 import { LabResultsPage } from './pages/LabResultsPage';
 import { WholesalePage } from './pages/WholesalePage';
@@ -21,9 +24,9 @@ import { PaymentShippingPage } from './pages/PaymentShippingPage';
 import { TermsPage } from './pages/TermsPage';
 
 import { Product } from './types/product';
-import { products, getProductBySlug } from './data/productsData';
+import { getProductBySlug } from './data/productsData';
 
-export const App: React.FC = () => {
+const MainLayout: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [shopCategory, setShopCategory] = useState<string>('All');
@@ -88,6 +91,12 @@ export const App: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[#FAFAFD]">
       {/* 21+ Research Compliance Entry Gate */}
       <ComplianceModal />
+
+      {/* Slide-out Research Cart Drawer */}
+      <CartDrawer
+        onNavigateToCheckout={() => setCurrentPage('checkout')}
+        onNavigateToShop={() => handleNavigate('shop')}
+      />
 
       {/* Top Notification Announcement Bar */}
       <TopBanner />
@@ -155,6 +164,10 @@ export const App: React.FC = () => {
           />
         )}
 
+        {currentPage === 'checkout' && (
+          <CheckoutPage onNavigate={handleNavigate} />
+        )}
+
         {currentPage === 'calculator' && (
           <CalculatorPage onNavigate={handleNavigate} />
         )}
@@ -191,6 +204,14 @@ export const App: React.FC = () => {
       {/* Footer */}
       <Footer onNavigate={handleNavigate} />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <CartProvider>
+      <MainLayout />
+    </CartProvider>
   );
 };
 
