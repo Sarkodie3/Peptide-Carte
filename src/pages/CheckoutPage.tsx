@@ -22,36 +22,30 @@ import {
   Globe,
   Check,
   Copy,
-  Coins
+  Coins,
+  Clock
 } from 'lucide-react';
 
 interface CheckoutPageProps {
   onNavigate: (page: string, param?: string) => void;
 }
 
-export const CRYPTO_WALLETS = {
+export const CRYPTO_COINS = {
   usdt: {
     symbol: 'USDT',
-    name: 'USDT (Tether)',
-    network: 'TRC-20 (Tron Network - Low Fee / Fast)',
-    address: 'TX8vK2hP4mZ7bQ9jL1rE6wN3yC5tA8sD',
-    instructions: 'Send via TRC-20 for sub-minute confirmation and zero gas congestion.',
+    name: 'USDT',
   },
   btc: {
     symbol: 'BTC',
-    name: 'Bitcoin (BTC)',
-    network: 'Bitcoin Native SegWit Network',
-    address: 'bc1q8dfw7k5p2x3m9f0t1w4y7c2z5a8e0h3l6r4v9',
-    instructions: 'Send native BTC to the designated address below.',
+    name: 'BTC',
   },
   eth: {
     symbol: 'ETH',
-    name: 'Ethereum (ETH)',
-    network: 'ERC-20 (Ethereum Network)',
-    address: '0x71C8F79B62529A9f6D503b8782E06A26fA08D169',
-    instructions: 'Send standard ETH or ERC-20 assets.',
+    name: 'ETH',
   },
 };
+
+export const CRYPTO_WALLETS = CRYPTO_COINS;
 
 export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   const {
@@ -234,14 +228,13 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       finalTotal,
       paymentMethod: formData.paymentMethod,
       cryptoCoin: formData.paymentMethod === 'crypto' ? selectedCrypto : null,
-      cryptoDetails: formData.paymentMethod === 'crypto' ? CRYPTO_WALLETS[selectedCrypto] : null,
       customer: { ...formData },
     };
 
     // Dispatches automated order notification email to peptidecart0@gmail.com
     await sendNotificationEmail({
       type: 'order',
-      subject: `New Order ${orderNumber} (${formatPrice(finalTotal)} CAD) from ${formData.firstName} ${formData.lastName}`,
+      subject: `New Order ${orderNumber} (${formatPrice(finalTotal)} CAD) [${formData.paymentMethod === 'crypto' ? `Crypto: ${selectedCrypto.toUpperCase()}` : 'Interac'}] from ${formData.firstName} ${formData.lastName}`,
       senderName: `${formData.firstName} ${formData.lastName}`,
       senderEmail: formData.email,
       senderPhone: formData.phone,
@@ -250,7 +243,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         itemsCount: cart.length,
         itemsSummary: cart.map(i => `${i.product.name} (${i.product.dosage}) x${i.quantity} - ${formatPrice(i.product.price * i.quantity)} CAD`).join('; '),
         finalTotal: `${formatPrice(finalTotal)} CAD`,
-        paymentMethod: formData.paymentMethod === 'crypto' ? `Crypto: ${CRYPTO_WALLETS[selectedCrypto].name}` : 'Interac e-Transfer',
+        paymentMethod: formData.paymentMethod === 'crypto' ? `Cryptocurrency (${selectedCrypto.toUpperCase()})` : 'Interac e-Transfer',
+        paymentActionRequired: formData.paymentMethod === 'crypto'
+          ? `ACTION REQUIRED: Please email the customer at ${formData.email} with your ${selectedCrypto.toUpperCase()} payment address and transfer instructions.`
+          : 'Domestic Interac e-Transfer auto-deposit pending.',
         shippingDestination: destinationAddress,
       },
     });
@@ -263,7 +259,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   // ORDER CONFIRMATION VIEW
   if (orderComplete && generatedOrder) {
     const addr = generatedOrder.destinationAddress;
-    const cryptoInfo = generatedOrder.cryptoDetails;
 
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
@@ -301,7 +296,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             <div className="flex items-center gap-2">
               <Lock className="w-5 h-5 text-brand-800" />
               <h3 className="font-bold text-base text-brand-950">
-                Payment Instructions: {generatedOrder.customer.paymentMethod === 'interac' ? 'Interac e-Transfer' : `Cryptocurrency (${cryptoInfo?.name || 'USDT'})`}
+                Payment Instructions: {generatedOrder.customer.paymentMethod === 'interac' ? 'Interac e-Transfer' : `Cryptocurrency (${generatedOrder.cryptoCoin ? generatedOrder.cryptoCoin.toUpperCase() : 'USDT'})`}
               </h3>
             </div>
 
@@ -327,48 +322,36 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               </div>
             )}
 
-            {/* CRYPTO VIEW (USDT / BTC / ETH) */}
-            {generatedOrder.customer.paymentMethod === 'crypto' && cryptoInfo && (
+            {/* CRYPTO VIEW (USDT / BTC / ETH) - INVOICE SENT VIA EMAIL */}
+            {generatedOrder.customer.paymentMethod === 'crypto' && (
               <div className="space-y-3 text-xs text-brand-900 leading-relaxed">
-                <p>
-                  Please send the equivalent of <strong className="font-mono text-sm">{formatPrice(generatedOrder.finalTotal)} CAD</strong> in <strong>{cryptoInfo.name}</strong> to the designated research address below:
-                </p>
-
-                <div className="p-4 bg-white rounded-xl border border-brand-200 space-y-3">
+                <div className="p-5 bg-white rounded-2xl border border-brand-200 space-y-3 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase text-slate-500">
-                      Network: <strong className="text-brand-900">{cryptoInfo.network}</strong>
+                    <span className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-brand-800" />
+                      <span>Payment Instructions Dispatched Via Email</span>
                     </span>
-                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded uppercase">
                       5% Discount Applied
                     </span>
                   </div>
 
-                  <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 flex items-center justify-between gap-2">
-                    <span className="font-mono text-xs break-all font-bold text-slate-900 select-all">
-                      {cryptoInfo.address}
-                    </span>
-                    <button
-                      onClick={() => copyToClipboard(cryptoInfo.address)}
-                      className="bg-brand-800 hover:bg-brand-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors flex-shrink-0"
-                    >
-                      {copiedAddress ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-gold-400" />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy Address</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <p className="text-[11px] text-slate-500">
-                    <strong>Memo / Reference:</strong> Include <code className="bg-slate-100 px-1.5 py-0.5 rounded text-brand-900 font-mono font-bold">{generatedOrder.orderNumber}</code> or reply to confirmation email with transaction TXID.
+                  <p className="text-slate-700 leading-relaxed">
+                    You have selected payment via <strong>{generatedOrder.cryptoCoin ? generatedOrder.cryptoCoin.toUpperCase() : 'USDT'}</strong> for a discounted total of <strong className="font-mono text-sm text-brand-950">{formatPrice(generatedOrder.finalTotal)} CAD</strong>.
                   </p>
+
+                  <div className="p-4 bg-purple-50/70 rounded-xl border border-brand-200 text-xs text-brand-950 space-y-1.5">
+                    <div className="font-bold text-brand-900 flex items-center gap-1.5">
+                      <Clock className="w-4 h-4 text-brand-800" />
+                      <span>Deposit Wallet Address Being Emailed Directly To You</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 leading-relaxed">
+                      Our fulfillment billing team has received your order and preferred coin ({generatedOrder.cryptoCoin ? generatedOrder.cryptoCoin.toUpperCase() : 'USDT'}). We will email you the official payment wallet address and deposit instructions directly to <strong>{generatedOrder.customer.email}</strong> shortly.
+                    </p>
+                    <p className="text-[11px] text-slate-500 pt-1">
+                      Please check your inbox (and spam/junk folder). Once you submit the transfer, reply with your transaction hash (TXID) to fast-track fulfillment.
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
@@ -984,60 +967,30 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                       Select Cryptocurrency Coin:
                     </span>
 
-                    <div className="grid grid-cols-3 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedCrypto('usdt')}
-                        className={`p-3 rounded-xl border text-center transition-all ${
-                          selectedCrypto === 'usdt'
-                            ? 'bg-brand-800 text-white border-brand-800 font-bold shadow-sm'
-                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                        }`}
-                      >
-                        <span className="block text-xs font-bold">USDT</span>
-                        <span className="text-[10px] block opacity-80">TRC-20</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setSelectedCrypto('btc')}
-                        className={`p-3 rounded-xl border text-center transition-all ${
-                          selectedCrypto === 'btc'
-                            ? 'bg-brand-800 text-white border-brand-800 font-bold shadow-sm'
-                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                        }`}
-                      >
-                        <span className="block text-xs font-bold">BTC</span>
-                        <span className="text-[10px] block opacity-80">Bitcoin</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setSelectedCrypto('eth')}
-                        className={`p-3 rounded-xl border text-center transition-all ${
-                          selectedCrypto === 'eth'
-                            ? 'bg-brand-800 text-white border-brand-800 font-bold shadow-sm'
-                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                        }`}
-                      >
-                        <span className="block text-xs font-bold">ETH</span>
-                        <span className="text-[10px] block opacity-80">Ethereum</span>
-                      </button>
+                    <div className="grid grid-cols-3 gap-3">
+                      {(['usdt', 'btc', 'eth'] as const).map((coin) => (
+                        <button
+                          key={coin}
+                          type="button"
+                          onClick={() => setSelectedCrypto(coin)}
+                          className={`py-3 px-4 rounded-xl border text-center transition-all font-bold text-xs sm:text-sm ${
+                            selectedCrypto === coin
+                              ? 'bg-brand-800 text-white border-brand-800 shadow-sm ring-1 ring-brand-800'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {coin.toUpperCase()}
+                        </button>
+                      ))}
                     </div>
 
-                    {/* Active Coin Preview Box */}
-                    <div className="p-3 bg-white rounded-xl border border-slate-200 text-xs space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-900">{CRYPTO_WALLETS[selectedCrypto].name}</span>
-                        <span className="text-[10px] font-mono text-brand-800 bg-brand-50 px-2 py-0.5 rounded font-semibold">
-                          {CRYPTO_WALLETS[selectedCrypto].network}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500">
-                        {CRYPTO_WALLETS[selectedCrypto].instructions}
-                      </p>
-                      <div className="bg-slate-50 p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700 break-all select-all flex items-center justify-between">
-                        <span>{CRYPTO_WALLETS[selectedCrypto].address}</span>
+                    <div className="p-3.5 bg-brand-50/70 rounded-xl border border-brand-200 text-xs text-brand-900 flex items-start gap-2.5">
+                      <Mail className="w-4 h-4 text-brand-800 flex-shrink-0 mt-0.5" />
+                      <div className="text-[11px] leading-relaxed">
+                        <span className="font-bold text-brand-950 block">Payment Instructions Sent via Email</span>
+                        <p className="text-slate-600 mt-0.5">
+                          When you place your order, our billing team will email you the official <strong>{selectedCrypto.toUpperCase()}</strong> deposit address and invoice directly to <strong>{formData.email || 'your email address'}</strong>.
+                        </p>
                       </div>
                     </div>
                   </div>

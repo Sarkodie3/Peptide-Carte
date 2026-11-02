@@ -135,7 +135,7 @@ export const PaymentShippingPage: React.FC<PaymentShippingProps> = ({ onNavigate
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-800 text-gold-300">Fast & Global</span>
             </div>
             <p className="leading-relaxed">
-              Preferred for Canadian and worldwide international laboratories. Settle instantly with your choice of <strong>USDT (TRC-20)</strong>, <strong>Bitcoin (BTC)</strong>, or <strong>Ethereum (ETH)</strong> with an automatic 5% discount applied at checkout.
+              Preferred for Canadian and worldwide international laboratories. Settle with your choice of <strong>USDT</strong>, <strong>BTC</strong>, or <strong>ETH</strong> with an automatic 5% order discount. Dedicated deposit wallet instructions and invoice details are delivered directly to your email upon order placement.
             </p>
           </div>
         </div>
