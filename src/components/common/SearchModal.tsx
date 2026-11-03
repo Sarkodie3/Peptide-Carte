@@ -79,7 +79,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search 56 peptides, dosages, SKUs, or batch COAs..."
+            placeholder="Search 80 peptides, dosages, SKUs, or batch COAs..."
             className="w-full bg-transparent border-none text-slate-800 placeholder-slate-400 text-base focus:outline-none"
           />
           {query && (
@@ -200,7 +200,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         {/* Modal Footer */}
         <div className="p-3 bg-slate-50 border-t border-slate-100 text-center text-xs text-slate-400">
-          Search across 56 research peptides & 37 HYTE analytical batch records
+          Search across 80 research peptides & 37 HYTE analytical batch records
         </div>
       </div>
     </div>

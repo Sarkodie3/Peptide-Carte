@@ -80,7 +80,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="w-full sm:w-auto bg-gradient-to-r from-brand-800 to-brand-900 hover:from-brand-900 hover:to-brand-950 text-white font-bold px-7 py-3.5 rounded-xl shadow-brand hover:shadow-brand-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm border border-brand-700/60"
                 >
                   <Sparkles className="w-4 h-4 text-gold-400" />
-                  <span>Explore Catalog (56 Compounds)</span>
+                  <span>Explore Catalog (80 Compounds)</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
@@ -285,7 +285,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             onClick={() => onNavigate('shop')}
             className="text-xs font-bold text-brand-800 hover:text-brand-950 flex items-center gap-1 group"
           >
-            <span>View All 56 Compounds</span>
+            <span>View All 80 Compounds</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-gold-600" />
           </button>
         </div>

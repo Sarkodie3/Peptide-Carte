@@ -24,7 +24,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 
   const links = [
     { id: 'home', label: 'Home', icon: Home },
-    { id: 'shop', label: 'Shop / Full Catalog', icon: ShoppingBag, badge: '56' },
+    { id: 'shop', label: 'Shop / Full Catalog', icon: ShoppingBag, badge: '80' },
     { id: 'calculator', label: 'Peptide Calculator', icon: Calculator, highlight: true },
     { id: 'lab-results', label: 'Lab Results / COAs', icon: FileText, badge: '37' },
     { id: 'wholesale', label: 'Wholesale & Bulk Orders', icon: Briefcase },

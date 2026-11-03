@@ -1,4 +1,4 @@
-// Verified 56 Products Catalog from peptidecart.is
+// Verified Expanded Products Catalog for Peptide Cart
 import { Product } from '../types/product';
 
 export const products: Product[] = [
@@ -1677,6 +1677,736 @@ export const products: Product[] = [
     "coaSkuMatch": null,
     "tags": [
       "Best Sellers",
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5001,
+    "sku": "RETATRUTIDE-50MG",
+    "name": "RETATRUTIDE 50 mg",
+    "slug": "retatrutide-50mg",
+    "category": "GLP",
+    "dosage": "50 mg",
+    "price": 189.99,
+    "regularPrice": 209.99,
+    "salePrice": 189.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/Retatrutide-50-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "High-yield lyophilized Retatrutide 50 mg tri-agonist research compound for multi-receptor metabolic and biochemical profiling.",
+    "description": "<p>Retatrutide (LY3437943) is an advanced unimolecular peptide acting as a triple receptor agonist of the GIP, GLP-1, and glucagon receptors. Formulated at 50 mg high-concentration yield for extended longitudinal assay evaluation in calibrated laboratory research settings.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile white powder",
+      "appearance": "White lyophilized cake/powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute strictly with bacteriostatic water under sterile laminar flow hood conditions."
+    },
+    "coaSkuMatch": "RET-GLP3-30MG",
+    "tags": [
+      "GLP",
+      "Best Sellers"
+    ]
+  },
+  {
+    "id": 5002,
+    "sku": "BPC-157-15MG",
+    "name": "BPC-157 15 mg",
+    "slug": "bpc-157-15mg",
+    "category": "Non-GLP",
+    "dosage": "15 mg",
+    "price": 69.99,
+    "regularPrice": 75.99,
+    "salePrice": 69.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/BPC-157-15-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "Ultra-pure BPC-157 (Body Protection Compound) 15 mg pentadecapeptide for tissue repair and angiogenesis cellular investigations.",
+    "description": "<p>BPC-157 (Body Protection Compound-157) is a 15-amino acid peptide derived from human gastric juice protein. Widely investigated in preclinical cellular models for tissue healing, microvascular integrity, and connective tissue maintenance assays.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White powder/lyophilized cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute strictly with bacteriostatic water under sterile laminar flow hood conditions."
+    },
+    "coaSkuMatch": "BPC-157-10MG",
+    "tags": [
+      "Non-GLP",
+      "Best Sellers"
+    ]
+  },
+  {
+    "id": 5003,
+    "sku": "PT-141-50MG",
+    "name": "PT-141 50 mg",
+    "slug": "pt-141-50mg",
+    "category": "Non-GLP",
+    "dosage": "50 mg",
+    "price": 129.99,
+    "regularPrice": 144.99,
+    "salePrice": 129.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/PT-141-50-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "High-capacity PT-141 (Bremelanotide) 50 mg melanocortin receptor agonist for central nervous system neuroendocrine bioassays.",
+    "description": "<p>Bremelanotide (PT-141) is a synthetic cyclic heptapeptide analog of alpha-MSH acting as a non-selective melanocortin receptor agonist (MC3R and MC4R). Provided at 50 mg for institutional research series.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White crystalline cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water for in-vitro assay applications."
+    },
+    "coaSkuMatch": "PT-141-10MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5004,
+    "sku": "CJC-DAC-IPA-5MG",
+    "name": "CJC-1295 (DAC) + IPAMORELIN 5 mg/5 mg",
+    "slug": "cjc-1295-dac-ipamorelin-5mg-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg/5 mg",
+    "price": 89.99,
+    "regularPrice": 99.99,
+    "salePrice": 89.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/CJC-1295-Ipamorelin-5-5-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "Synergistic dual-peptide blend combining bioconjugated CJC-1295 with DAC and selective ghrelin mimetic Ipamorelin.",
+    "description": "<p>Combines long half-life CJC-1295 with Drug Affinity Complex (DAC) and high-specificity pentapeptide Ipamorelin in a 1:1 ratio (5 mg each) to support sustained endocrine receptor kinetics studies.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized dual peptide solid",
+      "appearance": "White lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute gently without vigorous vortexing."
+    },
+    "coaSkuMatch": "CJC-1295-NO-DAC-IPAMORELIN-BLEND-5MG-5MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5005,
+    "sku": "RET-10MG-10PK",
+    "name": "RETATRUTIDE 10 mg (10-Vial Research Pack)",
+    "slug": "retatrutide-10mg-10-pack",
+    "category": "GLP",
+    "dosage": "10 x 10 mg",
+    "price": 549.99,
+    "regularPrice": 649.99,
+    "salePrice": 549.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/07/retatrutide-10mg-wholesale-vials-white.png",
+    "shortDescription": "Institutional 10-vial bulk pack of certified Retatrutide 10 mg (100 mg total) with lot-specific third-party HPLC analysis.",
+    "description": "<p>Factory-sealed institutional 10-pack of Retatrutide 10 mg vials (100 mg total). Designed for multi-cohort scientific studies requiring identical batch characteristics and minimal inter-vial variation.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "10 Lyophilized sterile glass vials",
+      "appearance": "White lyophilized cakes",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water under sterile conditions."
+    },
+    "coaSkuMatch": "RET-GLP3-10MG",
+    "tags": [
+      "GLP",
+      "Best Sellers",
+      "Wholesale"
+    ]
+  },
+  {
+    "id": 5006,
+    "sku": "TZP-15MG-10PK",
+    "name": "TIRZEPATIDE 15 mg (10-Vial Research Pack)",
+    "slug": "tirzepatide-15mg-10-pack",
+    "category": "GLP",
+    "dosage": "10 x 15 mg",
+    "price": 689.99,
+    "regularPrice": 789.99,
+    "salePrice": 689.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/11/Peptide_Cart-Tirzepatide-15mg-PDC00003.png",
+    "shortDescription": "Institutional 10-vial bulk pack of Tirzepatide 15 mg (150 mg total) for multi-replicate metabolic pathway investigations.",
+    "description": "<p>Bulk research 10-vial package of Tirzepatide 15 mg (150 mg total active compound). Each vial is independently vacuum sealed with rubber stoppers and flip-off aluminum caps.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "10 Lyophilized sterile glass vials",
+      "appearance": "White lyophilized solid",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "TIRZEPATIDE-15MG",
+    "tags": [
+      "GLP",
+      "Best Sellers",
+      "Wholesale"
+    ]
+  },
+  {
+    "id": 5007,
+    "sku": "BPC-10MG-10PK",
+    "name": "BPC-157 10 mg (10-Vial Research Pack)",
+    "slug": "bpc-157-10mg-10-pack",
+    "category": "Non-GLP",
+    "dosage": "10 x 10 mg",
+    "price": 419.99,
+    "regularPrice": 489.99,
+    "salePrice": 419.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/Peptide_Cart-BPC157-10mg-ZBE96SY2DJ3C.png",
+    "shortDescription": "Institutional wholesale pack of 10x BPC-157 10 mg vials (100 mg total) for extended tissue cellular assay protocols.",
+    "description": "<p>Ten individual 10 mg vials of ultra-high purity BPC-157 pentadecapeptide. Standardized lot manufacturing guarantees consistent reconstitution clarity and dissolution speed across all 10 vials.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "10 Lyophilized sterile glass vials",
+      "appearance": "White powder solid",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "BPC-157-10MG",
+    "tags": [
+      "Non-GLP",
+      "Best Sellers",
+      "Wholesale"
+    ]
+  },
+  {
+    "id": 5008,
+    "sku": "SEMA-5MG-10PK",
+    "name": "SEMAGLUTIDE 5 mg (10-Vial Research Pack)",
+    "slug": "semaglutide-5mg-10-pack",
+    "category": "GLP",
+    "dosage": "10 x 5 mg",
+    "price": 499.99,
+    "regularPrice": 589.99,
+    "salePrice": 499.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/08/Peptide_Cart-Semaglutide-5mg-PDC00002.png",
+    "shortDescription": "Wholesale multi-pack of 10x Semaglutide 5 mg vials (50 mg total) for controlled in-vitro glucagon-like peptide receptor assays.",
+    "description": "<p>Ten vacuum-sealed vials of Semaglutide 5 mg (50 mg total active compound). Each vial provides identical high-purity batch characteristics certified by independent HPLC analysis.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "10 Lyophilized sterile glass vials",
+      "appearance": "White lyophilized cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "SEMAGLUTIDE-5MG",
+    "tags": [
+      "GLP",
+      "Wholesale"
+    ]
+  },
+  {
+    "id": 5009,
+    "sku": "BUNDLE-TRIO-3PK",
+    "name": "RESEARCH PEPTIDE TRIO (3-Vial Study Bundle)",
+    "slug": "research-peptide-trio-bundle",
+    "category": "Non-GLP",
+    "dosage": "3 x Lyophilized Vials",
+    "price": 169.99,
+    "regularPrice": 199.99,
+    "salePrice": 169.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/3-x-Cart-Peptides-transparent-background-scaled.webp",
+    "shortDescription": "Comprehensive 3-vial exploratory peptide bundle curated for comparative biochemical assay testing and cellular kinetics studies.",
+    "description": "<p>Curated 3-vial multi-sequence research bundle designed for multi-target biochemical evaluations. Packaged in light-shielded amber/borosilicate glassware with complete lot analytical certificates.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "3 Lyophilized sterile vials",
+      "appearance": "White lyophilized powders",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": null,
+    "tags": [
+      "Non-GLP",
+      "Best Sellers"
+    ]
+  },
+  {
+    "id": 5010,
+    "sku": "RECON-KIT-30ML",
+    "name": "LABORATORY RECONSTITUTION ACCESSORY KIT",
+    "slug": "laboratory-reconstitution-accessory-kit",
+    "category": "Reconstitution",
+    "dosage": "30 mL + Reagents",
+    "price": 42.99,
+    "regularPrice": 49.99,
+    "salePrice": 42.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/Bacteriostatic-Water-transparent-background-4-scaled.png",
+    "shortDescription": "Complete laboratory reconstitution set including 30 mL Bacteriostatic sterile diluent, sterile transfer syringes, and alcohol prep wipes.",
+    "description": "<p>Complete sterile laboratory preparation set designed for clean peptide reconstitution protocols. Includes 1x 30 mL USP Bacteriostatic Water (0.9% benzyl alcohol preserved), 10x sterile U-100 micro-fine laboratory syringes, and 10x isopropyl alcohol surface wipes.</p>",
+    "specifications": {
+      "purityStandard": "USP Reagent Grade (Sterile)",
+      "form": "Liquid diluent & sterile laboratory consumables",
+      "appearance": "Clear liquid & packaged sterile consumables",
+      "storage": "15\u00b0C - 25\u00b0C room temperature",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Strictly for non-clinical laboratory in-vitro preparation."
+    },
+    "coaSkuMatch": "BACTERIOSTATIC-WATER-10-ML",
+    "tags": [
+      "Reconstitution"
+    ]
+  },
+  {
+    "id": 5011,
+    "sku": "GHK-CU-200MG",
+    "name": "GHK-CU 200 mg",
+    "slug": "ghk-cu-200mg",
+    "category": "Non-GLP",
+    "dosage": "200 mg",
+    "price": 89.99,
+    "regularPrice": 99.99,
+    "salePrice": 89.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/08/Peptide_Cart-GHK-Cu-100mg-PDC00005.png",
+    "shortDescription": "High-yield GHK-Cu (Copper Tripeptide-1) 200 mg lyophilized research compound for extensive cosmetic and dermal cellular studies.",
+    "description": "<p>GHK-Cu (Glycyl-L-Histidyl-L-Lysine Copper(II)) is a high-affinity copper peptide complex. At 200 mg high yield, it supports multi-plate skin extracellular matrix gene expression assays and fibroblast proliferation experiments.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized blue solid",
+      "appearance": "Deep blue lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Dissolves rapidly in bacteriostatic water to form a characteristic blue solution."
+    },
+    "coaSkuMatch": "GHK-CU-100MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5012,
+    "sku": "BPC-TB-5MG-5MG",
+    "name": "BPC-157 + TB-500 5 mg/5 mg",
+    "slug": "bpc-157-tb-500-5mg-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg/5 mg",
+    "price": 64.99,
+    "regularPrice": 72.99,
+    "salePrice": 64.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/BPC-157-TB-500-10-10-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "Co-formulated tissue repair duo containing 5 mg BPC-157 and 5 mg TB-500 in a balanced 1:1 research blend.",
+    "description": "<p>Dual-action co-formulation providing 5 mg of BPC-157 and 5 mg of Thymosin Beta-4 (TB-500). Enables researchers to examine the interplay between actin filament regulation and local endothelial angiogenic signaling.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized dual peptide solid",
+      "appearance": "White lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "BPC-157-TB-500-BLEND-10MG-10MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5013,
+    "sku": "TESAMORELIN-5MG",
+    "name": "TESAMORELIN 5 mg",
+    "slug": "tesamorelin-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg",
+    "price": 54.99,
+    "regularPrice": 62.99,
+    "salePrice": 54.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/08/Peptide_Cart-Tesamorelin-10mg-PDC00007.png",
+    "shortDescription": "Synthetic 44-amino acid growth hormone releasing factor analog (5 mg) for metabolic and endocrine signaling assays.",
+    "description": "<p>Tesamorelin is an N-terminally trans-3-hexenoyl-modified growth hormone releasing factor (GRF) 1-44 analog. Engineered for enhanced metabolic stability against dipeptidyl peptidase enzymatic degradation.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White to off-white cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "TESAMORELIN-10MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5014,
+    "sku": "IPAMORELIN-5MG",
+    "name": "IPAMORELIN 5 mg",
+    "slug": "ipamorelin-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg",
+    "price": 34.99,
+    "regularPrice": 39.99,
+    "salePrice": 34.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/Ipamorelin-10-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "Ultra-selective GHRP pentapeptide Ipamorelin 5 mg for pulsatile growth hormone secretagogue receptor bioassays.",
+    "description": "<p>Ipamorelin is a third-generation selective growth hormone secretagogue receptor agonist. Demonstrates exceptional target specificity without triggering significant cortisol, prolactin, or ACTH elevation in biological testing.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "IPAMORELIN-10-MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5015,
+    "sku": "EPITHALON-50MG",
+    "name": "EPITHALON 50 mg",
+    "slug": "epithalon-50mg",
+    "category": "Non-GLP",
+    "dosage": "50 mg",
+    "price": 119.99,
+    "regularPrice": 139.99,
+    "salePrice": 119.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/Epithalon-10-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "High-yield Epithalon (Epithalamin tetrapeptide) 50 mg for cellular aging, telomere dynamics, and circadian clock experiments.",
+    "description": "<p>Epithalon (Ala-Glu-Asp-Gly) is a synthetic pineal tetrapeptide. Documented in longevity research literature for up-regulating telomerase activity, stabilizing chromatin structure, and promoting cellular senescence delay.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White crystalline powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "EPITHALON-10MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5016,
+    "sku": "MOTS-C-5MG",
+    "name": "MOTS-C 5 mg",
+    "slug": "mots-c-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg",
+    "price": 39.99,
+    "regularPrice": 45.99,
+    "salePrice": 39.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/08/Peptide_Cart-MOTS-C-10mg-PDC00006.png",
+    "shortDescription": "Mitochondrial-derived 16-amino acid peptide MOTS-c 5 mg for cellular energy homeostasis and AICAR-AMPK metabolic assays.",
+    "description": "<p>MOTS-c is a 16-amino-acid peptide encoded within the mitochondrial 12S rRNA region. Serves as a retrograde signaling hormone that translocates to the nucleus to regulate glucose metabolism and adaptive stress responses.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White powder/cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "MOTS-C-10MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5017,
+    "sku": "NAD-1000MG",
+    "name": "NAD+ 1000 mg (1 g)",
+    "slug": "nad-1000mg",
+    "category": "Non-GLP",
+    "dosage": "1000 mg",
+    "price": 99.99,
+    "regularPrice": 119.99,
+    "salePrice": 99.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/10/Peptide_Cart-NAD-500mg-PE200001.png",
+    "shortDescription": "High-capacity Nicotinamide Adenine Dinucleotide (NAD+) 1000 mg for cellular mitochondrial respiration and sirtuin cofactor testing.",
+    "description": "<p>Beta-Nicotinamide Adenine Dinucleotide (NAD+) in oxidized coenzyme form (1000 mg active). Essential co-substrate for PARP enzymes, CD38 glycohydrolases, and sirtuin family deacylases (SIRT1\u2013SIRT7).</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White to pale cream powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Protect from moisture and intense light exposure during dilution."
+    },
+    "coaSkuMatch": "NAD-500MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5018,
+    "sku": "SEMAX-30MG",
+    "name": "SEMAX 30 mg",
+    "slug": "semax-30mg",
+    "category": "Non-GLP",
+    "dosage": "30 mg",
+    "price": 94.99,
+    "regularPrice": 109.99,
+    "salePrice": 94.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/10/Peptide_Cart-Semax-10mg-PE200005.png",
+    "shortDescription": "High-concentration ACTH(4-10) heptapeptide Semax 30 mg for brain-derived neurotrophic factor (BDNF) expression assays.",
+    "description": "<p>Semax is an analog of ACTH(4-10) with an added C-terminal Pro-Gly-Pro tripeptide. High concentration 30 mg yield tailored for long-term neuronal cell culture assays and neuroprotective signaling studies.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "SEMAX-10MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5019,
+    "sku": "SELANK-30MG",
+    "name": "SELANK 30 mg",
+    "slug": "selank-30mg",
+    "category": "Non-GLP",
+    "dosage": "30 mg",
+    "price": 94.99,
+    "regularPrice": 109.99,
+    "salePrice": 94.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/03/Selank-10-mg-Cart-Peptide-transparent-background.webp",
+    "shortDescription": "Synthetic tuftsin-analog heptapeptide Selank 30 mg for neuroimmune modulation and neurotransmitter receptor testing.",
+    "description": "<p>Selank is a regulatory heptapeptide analog of the naturally occurring immunomodulatory peptide tuftsin. High-dose 30 mg specification for institutional neurochemistry investigations.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White powder solid",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": null,
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5020,
+    "sku": "TZP-20MG",
+    "name": "TIRZEPATIDE 20 mg",
+    "slug": "tzp-glp2-20mg",
+    "category": "GLP",
+    "dosage": "20 mg",
+    "price": 109.99,
+    "regularPrice": 124.99,
+    "salePrice": 109.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/Tirzepatide-10-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "Dual GIP and GLP-1 receptor agonist Tirzepatide 20 mg formulated for high-dose metabolic signaling research.",
+    "description": "<p>Tirzepatide is a 39-amino acid linear synthetic peptide that stimulates both glucose-dependent insulinotropic polypeptide (GIP) and GLP-1 receptors. Formulated at 20 mg for detailed dose-titration in-vitro experiments.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile glass vial",
+      "appearance": "White lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "TZP-GLP2-30MG",
+    "tags": [
+      "GLP"
+    ]
+  },
+  {
+    "id": 5021,
+    "sku": "RET-15MG",
+    "name": "RETATRUTIDE 15 mg",
+    "slug": "retatrutide-15mg",
+    "category": "GLP",
+    "dosage": "15 mg",
+    "price": 104.99,
+    "regularPrice": 119.99,
+    "salePrice": 104.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/11/Peptide_Cart-Retatrutide-10mg-YRHUPSXB7CP8.png",
+    "shortDescription": "Triple GIP/GLP-1/Glucagon receptor agonist Retatrutide 15 mg for advanced metabolic and lipid clearance assays.",
+    "description": "<p>Retatrutide 15 mg single-vial specification. Allows researchers to precisely measure receptor binding kinetics across GIPR, GLP-1R, and GCGR in metabolic tissue culture platforms.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "RET-GLP3-10MG",
+    "tags": [
+      "GLP"
+    ]
+  },
+  {
+    "id": 5022,
+    "sku": "CJC-DAC-2MG",
+    "name": "CJC-1295 with DAC 2 mg",
+    "slug": "cjc-1295-dac-2mg",
+    "category": "Non-GLP",
+    "dosage": "2 mg",
+    "price": 44.99,
+    "regularPrice": 49.99,
+    "salePrice": 44.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2025/10/CJC-1295-Ipamorelin-5-5-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "CJC-1295 with Drug Affinity Complex (DAC) 2 mg for extended growth hormone releasing factor biological studies.",
+    "description": "<p>CJC-1295 with DAC is a modified GRF 1-29 peptide covalently bound to a maleimidopropionic acid linker that conjugates to circulating albumin, significantly extending biological half-life for research assays.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": "CJC-1295-NO-DAC-10-MG",
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5023,
+    "sku": "GHRP2-5MG",
+    "name": "GHRP-2 5 mg",
+    "slug": "ghrp-2-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg",
+    "price": 34.99,
+    "regularPrice": 39.99,
+    "salePrice": 34.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/03/Sermorelin-10-mg-Cart-Peptide-transparent-background.webp",
+    "shortDescription": "Synthetic hexapeptide Growth Hormone Releasing Peptide-2 (5 mg) for ghrelin receptor pathway and pituitary assays.",
+    "description": "<p>GHRP-2 (Pralmorelin) is a synthetic growth hormone secretagogue acting on the GHS-R1a receptor. Examined in preclinical models for pituitary hormone secretion dynamics and calcium influx signaling.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White lyophilized cake",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": null,
+    "tags": [
+      "Non-GLP"
+    ]
+  },
+  {
+    "id": 5024,
+    "sku": "GHRP6-5MG",
+    "name": "GHRP-6 5 mg",
+    "slug": "ghrp-6-5mg",
+    "category": "Non-GLP",
+    "dosage": "5 mg",
+    "price": 34.99,
+    "regularPrice": 39.99,
+    "salePrice": 34.99,
+    "onSale": true,
+    "currency": "CAD",
+    "currencySymbol": "$",
+    "isInStock": true,
+    "imageUrl": "https://peptidecart.is/wp-content/uploads/2026/03/Thymulin-10-mg-Cart-Peptide-transparent-background-scaled.webp",
+    "shortDescription": "First-generation hexapeptide GHRP-6 5 mg for metabolic appetite regulation and growth hormone axis investigations.",
+    "description": "<p>GHRP-6 (His-D-Trp-Ala-Trp-D-Phe-Lys-NH2) is an established research secretagogue hexapeptide that stimulates somatotrope secretion and activates peripheral neuroendocrine receptors in cell cultures.</p>",
+    "specifications": {
+      "purityStandard": "\u2265 99.0% (HPLC Verified)",
+      "form": "Lyophilized sterile solid",
+      "appearance": "White lyophilized powder",
+      "storage": "-20\u00b0C sealed dry (Reconstituted: 2\u00b0C - 8\u00b0C)",
+      "countryOfOrigin": "Canada",
+      "reconstitutionNotes": "Reconstitute with bacteriostatic water."
+    },
+    "coaSkuMatch": null,
+    "tags": [
       "Non-GLP"
     ]
   }

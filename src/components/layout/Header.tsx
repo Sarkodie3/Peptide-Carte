@@ -22,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navItems = [
     { id: 'home', label: 'Home' },
-    { id: 'shop', label: 'Shop', badge: '56 Items' },
+    { id: 'shop', label: 'Shop', badge: '80 Items' },
     { id: 'calculator', label: 'Peptide Calculator', icon: Calculator, highlight: true },
     { id: 'lab-results', label: 'Lab Results / COAs', icon: FileText },
     { id: 'wholesale', label: 'Wholesale & Bulk' },

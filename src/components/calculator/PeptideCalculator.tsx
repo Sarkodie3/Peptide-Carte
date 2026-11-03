@@ -15,8 +15,10 @@ const PRESETS: Preset[] = [
   { name: 'Semaglutide 5mg', vialMg: 5, waterMl: 2, doseMcg: 250 },
   { name: 'BPC-157 5mg', vialMg: 5, waterMl: 2, doseMcg: 250 },
   { name: 'BPC-157 10mg', vialMg: 10, waterMl: 2, doseMcg: 500 },
+  { name: 'BPC-157 15mg', vialMg: 15, waterMl: 3, doseMcg: 500 },
   { name: 'GHK-Cu 50mg', vialMg: 50, waterMl: 3, doseMcg: 1000 },
   { name: 'Retatrutide 10mg', vialMg: 10, waterMl: 2, doseMcg: 2000 },
+  { name: 'Retatrutide 50mg', vialMg: 50, waterMl: 5, doseMcg: 2500 },
   { name: 'NAD+ 500mg', vialMg: 500, waterMl: 10, doseMcg: 50000 },
 ];
 

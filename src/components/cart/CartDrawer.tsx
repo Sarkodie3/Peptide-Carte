@@ -177,7 +177,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   }}
                   className="bg-brand-800 hover:bg-brand-900 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-brand transition-all inline-flex items-center gap-1.5"
                 >
-                  <span>Browse 56 Research Compounds</span>
+                  <span>Browse 80 Research Compounds</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

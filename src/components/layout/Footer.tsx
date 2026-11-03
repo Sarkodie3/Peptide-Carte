@@ -140,7 +140,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div>
             <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4 pb-2 border-b border-brand-900 flex items-center justify-between">
               <span>Catalog</span>
-              <span className="text-[10px] text-gold-400">56 Items</span>
+              <span className="text-[10px] text-gold-400">80 Items</span>
             </h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
