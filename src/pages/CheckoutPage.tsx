@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCart, MIN_ORDER_AMOUNT, FREE_SHIPPING_THRESHOLD } from '../context/CartContext';
 import { formatPrice } from '../utils/formatters';
-import { sendNotificationEmail, ADMIN_EMAIL } from '../services/emailService';
+import { sendNotificationEmail, ADMIN_EMAIL, SECONDARY_EMAIL, generateOrderMailtoUri } from '../services/emailService';
 import { saveOrderToDb } from '../services/orderStorageService';
 import { 
   ShieldCheck, 
@@ -277,7 +277,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               Thank You for Your Order!
             </h1>
             <p className="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
-              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received and dispatched to our central fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>.
+              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received and dispatched to our central fulfillment desks at <strong className="text-brand-900">{ADMIN_EMAIL}</strong> and <strong className="text-brand-900">{SECONDARY_EMAIL}</strong>.
             </p>
           </div>
 
@@ -309,7 +309,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 <p>Please send an Interac e-Transfer for <strong className="font-mono text-sm">{formatPrice(generatedOrder.finalTotal)} CAD</strong> to our automated fulfillment deposit recipient:</p>
                 <div className="p-4 bg-white rounded-xl border border-brand-200 font-mono text-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span>Recipient Email: <strong>{ADMIN_EMAIL}</strong></span>
+                    <span>Recipient Email: <strong>{ADMIN_EMAIL}</strong> <span className="text-[10px] text-slate-500 font-sans">(or {SECONDARY_EMAIL})</span></span>
                     <button
                       onClick={() => copyToClipboard(ADMIN_EMAIL)}
                       className="text-[11px] font-sans font-bold text-brand-800 hover:underline flex items-center gap-1"
@@ -358,6 +358,53 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Direct Email Dispatch & Instant Relay Card */}
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-xs text-amber-950 space-y-3 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span className="font-bold flex items-center gap-2 text-sm text-amber-900">
+                <Mail className="w-4 h-4 text-amber-700" />
+                <span>Central Order Notification Desk</span>
+              </span>
+              <span className="text-[10px] font-mono bg-white px-2.5 py-0.5 rounded-full border border-amber-200 text-amber-800 font-bold self-start sm:self-auto">
+                peptidecart0@gmail.com • peptide0@gmail.com
+              </span>
+            </div>
+            <p className="text-slate-700 leading-relaxed">
+              Order <strong className="font-mono text-brand-950">{generatedOrder.orderNumber}</strong> has been recorded in our permanent Fulfillment Repository. You can also send a direct dispatch copy from your email app with one click below:
+            </p>
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <a
+                href={generateOrderMailtoUri({
+                  type: 'order',
+                  subject: `New Order ${generatedOrder.orderNumber} ($${formatPrice(generatedOrder.finalTotal)} CAD) [${generatedOrder.customer.paymentMethod === 'crypto' ? `Crypto: ${generatedOrder.cryptoCoin?.toUpperCase()}` : 'Interac'}]`,
+                  senderName: `${generatedOrder.customer.firstName} ${generatedOrder.customer.lastName}`,
+                  senderEmail: generatedOrder.customer.email,
+                  senderPhone: generatedOrder.customer.phone,
+                  details: {
+                    orderNumber: generatedOrder.orderNumber,
+                    itemsCount: generatedOrder.items.length,
+                    itemsSummary: generatedOrder.items.map((i: any) => `${i.product.name} (${i.product.dosage}) x${i.quantity} = $${(i.product.price * i.quantity).toFixed(2)} CAD`).join('; '),
+                    finalTotal: `${formatPrice(generatedOrder.finalTotal)} CAD`,
+                    paymentMethod: generatedOrder.customer.paymentMethod === 'crypto' ? `Cryptocurrency (${generatedOrder.cryptoCoin?.toUpperCase()})` : 'Interac e-Transfer',
+                    shippingDestination: `${addr.address} ${addr.suite ? `(${addr.suite})` : ''}, ${addr.city}, ${addr.stateProvince} ${addr.postalCode}, ${addr.country}`,
+                  },
+                })}
+                className="px-4 py-2.5 bg-gradient-to-r from-brand-900 to-brand-950 hover:from-brand-950 hover:to-black text-white font-bold rounded-xl transition-all flex items-center gap-2 shadow-sm text-xs"
+              >
+                <Mail className="w-3.5 h-3.5 text-gold-400" />
+                <span>Open in Email App & Send Copy</span>
+              </a>
+
+              <button
+                onClick={() => onNavigate('admin-orders')}
+                className="px-4 py-2.5 bg-white hover:bg-amber-100 text-brand-900 border border-brand-300 font-bold rounded-xl transition-colors flex items-center gap-2 text-xs"
+              >
+                <Package className="w-3.5 h-3.5 text-brand-800" />
+                <span>View in Central Fulfillment Desk</span>
+              </button>
+            </div>
           </div>
 
           {/* Itemized Receipt Table */}

@@ -132,7 +132,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdminOrders })
               Your trusted laboratory source for analytical research peptides, GLP sequences, and laboratory reconstitution accessories. Transparent science, verified purity, and domestic Canada & international delivery.
             </p>
             <div className="text-xs text-slate-400 space-y-1">
-              <p>Email: <a href="mailto:peptidecart0@gmail.com" className="text-gold-400 hover:underline">peptidecart0@gmail.com</a></p>
+              <p>Email: <a href="mailto:peptidecart0@gmail.com" className="text-gold-400 hover:underline">peptidecart0@gmail.com</a> • <a href="mailto:peptide0@gmail.com" className="text-gold-400 hover:underline">peptide0@gmail.com</a></p>
               <p>Location: Fulfillment Hubs in Canada • Global Air Dispatch</p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Clock, MapPin, Send, CheckCircle2, ShieldAlert, MessageSquare, AlertCircle } from 'lucide-react';
-import { sendNotificationEmail, ADMIN_EMAIL } from '../services/emailService';
+import { Mail, Clock, MapPin, Send, CheckCircle2, ShieldAlert, MessageSquare, AlertCircle, ExternalLink } from 'lucide-react';
+import { sendNotificationEmail, ADMIN_EMAIL, SECONDARY_EMAIL, ADMIN_EMAILS } from '../services/emailService';
 
 export const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +27,7 @@ export const ContactPage: React.FC = () => {
       details: {
         subject: formData.subject,
         orderOrBatchRef: formData.orderNumber || 'Not provided',
-        directAdminRecipient: ADMIN_EMAIL,
+        directAdminRecipient: ADMIN_EMAILS.join(', '),
       },
       message: formData.message,
     });
@@ -35,6 +35,8 @@ export const ContactPage: React.FC = () => {
     setIsSubmitting(false);
     setSubmitted(true);
   };
+
+  const directMailtoUrl = `mailto:${ADMIN_EMAILS.join(',')}?subject=${encodeURIComponent(`[Peptide Cart Inquiry] ${formData.subject}`)}&body=${encodeURIComponent(`Name: ${formData.name || 'Client'}\nEmail: ${formData.email || 'N/A'}\nPhone: ${formData.phone || 'N/A'}\nOrder Ref: ${formData.orderNumber || 'N/A'}\n\nMessage:\n${formData.message || ''}`)}`;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
@@ -70,8 +72,11 @@ export const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <span className="font-bold text-slate-900 text-sm block">Direct Email Support</span>
-                  <a href={`mailto:${ADMIN_EMAIL}`} className="text-brand-800 font-semibold hover:underline">
+                  <a href={`mailto:${ADMIN_EMAIL}`} className="text-brand-800 font-semibold hover:underline block">
                     {ADMIN_EMAIL}
+                  </a>
+                  <a href="mailto:peptide0@gmail.com" className="text-brand-700 font-semibold hover:underline block text-[11px]">
+                    peptide0@gmail.com
                   </a>
                   <p className="text-slate-400 mt-0.5">Average response: Under 2 business hours</p>
                 </div>
@@ -117,32 +122,41 @@ export const ContactPage: React.FC = () => {
         <div className="lg:col-span-7">
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-brand-100 shadow-brand">
             {submitted ? (
-              <div className="py-12 text-center space-y-3">
+              <div className="py-12 text-center space-y-4">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h4 className="text-xl font-extrabold text-slate-900">
                   Message Dispatched Successfully
                 </h4>
-                <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <strong>{formData.name}</strong>. Your submission has been delivered directly to <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. A support ticket has been recorded, and our team will reply promptly.
+                <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                  Thank you, <strong>{formData.name}</strong>. Your inquiry has been routed to our operations desks at <strong className="text-brand-900">peptidecart0@gmail.com</strong> and <strong className="text-brand-900">peptide0@gmail.com</strong>.
                 </p>
-                <button
-                  onClick={() => {
-                    setSubmitted(false);
-                    setFormData({
-                      name: '',
-                      email: '',
-                      phone: '',
-                      orderNumber: '',
-                      subject: 'Client Complaint / Order Issue Resolution',
-                      message: '',
-                    });
-                  }}
-                  className="pt-2 text-xs font-bold text-brand-800 underline hover:text-brand-950"
-                >
-                  Submit another message or complaint
-                </button>
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <a
+                    href={directMailtoUrl}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-900 hover:bg-brand-950 text-white font-bold text-xs shadow transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-gold-400" />
+                    Open in Email App & Send Copy
+                  </a>
+                  <button
+                    onClick={() => {
+                      setSubmitted(false);
+                      setFormData({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        orderNumber: '',
+                        subject: 'Client Complaint / Order Issue Resolution',
+                        message: '',
+                      });
+                    }}
+                    className="text-xs font-bold text-slate-600 hover:text-slate-900 underline py-2"
+                  >
+                    Submit another message
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 text-xs">
@@ -151,7 +165,7 @@ export const ContactPage: React.FC = () => {
                     Client Inquiries & Complaints
                   </h3>
                   <span className="text-[11px] font-semibold text-brand-800 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-200">
-                    Direct to {ADMIN_EMAIL}
+                    Direct to peptidecart0@gmail.com • peptide0@gmail.com
                   </span>
                 </div>
 

@@ -58,10 +58,10 @@ ${order.items.map(i => ` - ${i.product.name} (${i.product.dosage}) x${i.quantity
               <Package className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
                 Central Order Fulfillment Desk
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-gold-400/20 text-gold-300 font-normal">
-                  {ADMIN_EMAIL}
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-gold-400/20 text-gold-300 font-normal">
+                  peptidecart0@gmail.com • peptide0@gmail.com
                 </span>
               </h2>
               <p className="text-xs text-slate-300">Live order repository & courier fulfillment queue</p>
@@ -84,11 +84,11 @@ ${order.items.map(i => ` - ${i.product.name} (${i.product.dosage}) x${i.quantity
           </div>
         </div>
 
-        {/* Activation Banner */}
-        <div className="p-4 bg-amber-50 border-b border-amber-200 text-xs text-amber-900 flex items-start gap-3">
-          <Mail className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+        {/* Real-Time Storage Notice */}
+        <div className="p-4 bg-emerald-50 border-b border-emerald-200 text-xs text-emerald-950 flex items-start gap-3">
+          <Package className="w-4 h-4 text-emerald-700 flex-shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <strong>Email Activation Notice:</strong> To ensure automatic email notifications arrive in your inbox, please open <strong>{ADMIN_EMAIL}</strong> (and check your Spam/Junk folder) and click the one-time <strong>"Activate Form"</strong> link sent by the mail gateway. All orders placed on the site are also recorded here in real-time.
+            <strong>Real-Time Fulfillment Database:</strong> All orders placed on the website are instantly logged here with complete customer contact details, itemized lots, and delivery addresses. You can copy the full courier dispatch summary or forward it directly to your email with 1 click.
           </div>
         </div>
 
