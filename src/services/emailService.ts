@@ -35,23 +35,54 @@ export const sendNotificationEmail = async (payload: EmailPayload): Promise<{ su
     }
   }
 
-  // Construct standard submission body
-  const submissionBody = {
-    _to: ADMIN_EMAIL,
-    _replyto: payload.senderEmail,
-    _subject: emailSubject,
-    _template: 'table',
-    _captcha: 'false',
-    Submission_Type: payload.type.toUpperCase(),
-    Sender_Name: payload.senderName,
-    Sender_Email: payload.senderEmail,
-    Sender_Phone: payload.senderPhone || 'Not provided',
-    Message_Content: payload.message || 'No additional message text',
-    Timestamp: new Date().toISOString(),
-    ...formattedDetails,
-  };
+  // Construct message text summary
+  let messageSummary = payload.message || '';
+  if (Object.keys(formattedDetails).length > 0) {
+    messageSummary += '\n\n--- TRANSACTION / ORDER DETAILS ---\n';
+    for (const [k, v] of Object.entries(formattedDetails)) {
+      messageSummary += `${k.replace(/([A-Z])/g, ' $1')}: ${v}\n`;
+    }
+  }
 
-  // Primary Gateway: FormSubmit direct inbox forwarder
+  // Gateway 1: ShipMyForm direct inbox endpoint
+  try {
+    const formData = new FormData();
+    formData.append('name', payload.senderName);
+    formData.append('email', payload.senderEmail);
+    formData.append('phone', payload.senderPhone || 'Not provided');
+    formData.append('subject', emailSubject);
+    formData.append('message', messageSummary);
+
+    for (const [k, v] of Object.entries(formattedDetails)) {
+      formData.append(k, v);
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+    const shipRes = await fetch(`https://shipmyform.com/to/${ADMIN_EMAIL}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: formData,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    const shipData = await shipRes.json().catch(() => null);
+    if (shipRes.ok || (shipData && shipData.ok)) {
+      logToLocalAudit(payload);
+      return {
+        success: true,
+        message: `Notification successfully routed directly to ${ADMIN_EMAIL}.`,
+      };
+    }
+  } catch (err) {
+    console.warn('ShipMyForm gateway attempt:', err);
+  }
+
+  // Gateway 2: FormSubmit direct inbox forwarder
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 6000);
@@ -62,7 +93,20 @@ export const sendNotificationEmail = async (payload: EmailPayload): Promise<{ su
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: JSON.stringify(submissionBody),
+      body: JSON.stringify({
+        _to: ADMIN_EMAIL,
+        _replyto: payload.senderEmail,
+        _subject: emailSubject,
+        _template: 'table',
+        _captcha: 'false',
+        Submission_Type: payload.type.toUpperCase(),
+        Sender_Name: payload.senderName,
+        Sender_Email: payload.senderEmail,
+        Sender_Phone: payload.senderPhone || 'Not provided',
+        Message_Content: messageSummary,
+        Timestamp: new Date().toISOString(),
+        ...formattedDetails,
+      }),
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
@@ -75,34 +119,7 @@ export const sendNotificationEmail = async (payload: EmailPayload): Promise<{ su
       };
     }
   } catch (err) {
-    console.warn('Primary dispatch gateway unavailable, trying secondary gateway:', err);
-  }
-
-  // Secondary Gateway: Standard Formspree proxy
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
-
-    const formspreeRes = await fetch('https://formspree.io/f/xovkglno', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(submissionBody),
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-
-    if (formspreeRes.ok) {
-      logToLocalAudit(payload);
-      return {
-        success: true,
-        message: `Notification successfully routed to ${ADMIN_EMAIL}.`,
-      };
-    }
-  } catch (err) {
-    console.warn('Secondary dispatch gateway unavailable:', err);
+    console.warn('FormSubmit gateway attempt:', err);
   }
 
   // Resilient Local Audit Trail: Ensure zero orders/inquiries are lost
@@ -113,6 +130,29 @@ export const sendNotificationEmail = async (payload: EmailPayload): Promise<{ su
     success: true,
     message: `Order & notification successfully queued and routed to ${ADMIN_EMAIL}.`,
   };
+};
+
+/**
+ * Generates an active mailto URI so the administrator or user can trigger an email with one click
+ */
+export const generateOrderMailtoUri = (payload: EmailPayload): string => {
+  const subject = encodeURIComponent(`[Peptide Cart ${payload.type.toUpperCase()}] ${payload.subject}`);
+  let body = `Peptide Cart Notification\n`;
+  body += `Target Recipient: ${ADMIN_EMAIL}\n`;
+  body += `Customer: ${payload.senderName} (${payload.senderEmail})\n`;
+  body += `Phone: ${payload.senderPhone || 'N/A'}\n\n`;
+  body += `--- DETAILS ---\n`;
+  for (const [k, v] of Object.entries(payload.details)) {
+    if (typeof v === 'object') {
+      body += `${k}: ${JSON.stringify(v)}\n`;
+    } else {
+      body += `${k}: ${v}\n`;
+    }
+  }
+  if (payload.message) {
+    body += `\nMessage: ${payload.message}\n`;
+  }
+  return `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${encodeURIComponent(body)}`;
 };
 
 /**
@@ -127,10 +167,9 @@ const logToLocalAudit = (payload: EmailPayload) => {
       timestamp: new Date().toISOString(),
       payload,
     });
-    // Keep last 50 entries
     if (existing.length > 50) existing.length = 50;
     localStorage.setItem('peptidecart_dispatched_notifications', JSON.stringify(existing));
   } catch {
-    // Ignore localStorage errors (e.g. incognito quota)
+    // Ignore localStorage errors
   }
 };

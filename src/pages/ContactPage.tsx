@@ -125,7 +125,7 @@ export const ContactPage: React.FC = () => {
                   Message Dispatched Successfully
                 </h4>
                 <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <strong>{formData.name}</strong>. Your submission has been delivered directly to <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. A support ticket has been recorded, and our team will reply promptly to <strong>{formData.email}</strong>.
+                  Thank you, <strong>{formData.name}</strong>. Your submission has been delivered directly to <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. A support ticket has been recorded, and our team will reply promptly.
                 </p>
                 <button
                   onClick={() => {

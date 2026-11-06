@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart, MIN_ORDER_AMOUNT, FREE_SHIPPING_THRESHOLD } from '../context/CartContext';
 import { formatPrice } from '../utils/formatters';
 import { sendNotificationEmail, ADMIN_EMAIL } from '../services/emailService';
+import { saveOrderToDb } from '../services/orderStorageService';
 import { 
   ShieldCheck, 
   Truck, 
@@ -23,7 +24,8 @@ import {
   Check,
   Copy,
   Coins,
-  Clock
+  Clock,
+  Package
 } from 'lucide-react';
 
 interface CheckoutPageProps {
@@ -252,6 +254,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     });
 
     setGeneratedOrder(orderData);
+    saveOrderToDb(orderData);
     setOrderComplete(true);
     clearCart();
   };
@@ -274,7 +277,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               Thank You for Your Order!
             </h1>
             <p className="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
-              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received. An official confirmation has been delivered to <strong>{generatedOrder.customer.email}</strong> and dispatched to our central fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>.
+              Your research supply order <strong className="font-mono text-brand-950 font-bold">{generatedOrder.orderNumber}</strong> has been received and dispatched to our central fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>.
             </p>
           </div>
 
@@ -346,7 +349,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                       <span>Deposit Wallet Address Being Emailed Directly To You</span>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-relaxed">
-                      Our fulfillment billing team has received your order and preferred coin ({generatedOrder.cryptoCoin ? generatedOrder.cryptoCoin.toUpperCase() : 'USDT'}). We will email you the official payment wallet address and deposit instructions directly to <strong>{generatedOrder.customer.email}</strong> shortly.
+                      Our fulfillment billing team has received your order and preferred coin ({generatedOrder.cryptoCoin ? generatedOrder.cryptoCoin.toUpperCase() : 'USDT'}). We will email you the official payment wallet address and deposit instructions directly shortly.
                     </p>
                     <p className="text-[11px] text-slate-500 pt-1">
                       Please check your inbox (and spam/junk folder). Once you submit the transfer, reply with your transaction hash (TXID) to fast-track fulfillment.
@@ -409,13 +412,23 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100">
-            <button
-              onClick={() => window.print()}
-              className="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors flex items-center justify-center gap-2"
-            >
-              <Printer className="w-4 h-4" />
-              <span>Print Invoice Receipt</span>
-            </button>
+            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+              <button
+                onClick={() => window.print()}
+                className="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors flex items-center justify-center gap-2"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print Invoice Receipt</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('admin-orders')}
+                className="w-full sm:w-auto px-5 py-3 rounded-xl border border-brand-200 bg-brand-50 hover:bg-brand-100 text-brand-900 text-xs font-bold transition-colors flex items-center justify-center gap-2"
+              >
+                <Package className="w-4 h-4 text-brand-800" />
+                <span>Fulfillment Desk Record</span>
+              </button>
+            </div>
 
             <button
               onClick={() => onNavigate('shop')}

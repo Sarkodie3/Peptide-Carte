@@ -3,9 +3,10 @@ import { ShieldCheck, Truck, Lock, Mail, ArrowRight, CheckCircle2, AlertTriangle
 
 interface FooterProps {
   onNavigate: (page: string, param?: string) => void;
+  onOpenAdminOrders?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdminOrders }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -255,12 +256,24 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Bottom Bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© 2026 Peptide Cart (peptidecart.is). All rights reserved.</p>
-          <div className="flex items-center gap-4 text-xs">
+          <div className="flex flex-wrap items-center gap-4 text-xs">
             <button onClick={() => onNavigate('terms')} className="hover:text-slate-300">Terms of Use</button>
             <span>•</span>
             <button onClick={() => onNavigate('payment-shipping')} className="hover:text-slate-300">Shipping Terms</button>
             <span>•</span>
             <button onClick={() => onNavigate('lab-results')} className="hover:text-slate-300">COA Registry</button>
+            {onOpenAdminOrders && (
+              <>
+                <span>•</span>
+                <button
+                  onClick={onOpenAdminOrders}
+                  className="text-slate-400 hover:text-gold-400 transition-colors font-medium flex items-center gap-1"
+                >
+                  <Lock className="w-3 h-3 text-gold-400" />
+                  <span>Fulfillment Desk</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

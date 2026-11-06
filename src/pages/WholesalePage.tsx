@@ -165,7 +165,7 @@ export const WholesalePage: React.FC = () => {
                 Wholesale Inquiry Received
               </h4>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                Thank you, <strong>{formData.name}</strong> from <strong>{formData.institution}</strong>. Your inquiry has been routed directly to our centralized fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. Our senior accounts director will reach out to <strong>{formData.email}</strong> within 2 business hours with formal invoicing and lot reservations.
+                Thank you, <strong>{formData.name}</strong> from <strong>{formData.institution}</strong>. Your inquiry has been routed directly to our centralized fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. Our senior accounts director will reach out within 2 business hours with formal invoicing and lot reservations.
               </p>
             </div>
           ) : (

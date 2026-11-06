@@ -8,6 +8,7 @@ import { ComplianceModal } from './components/layout/ComplianceModal';
 import { SearchModal } from './components/common/SearchModal';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { QuoteModal } from './components/common/QuoteModal';
+import { AdminOrdersModal } from './components/admin/AdminOrdersModal';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -34,18 +35,22 @@ const MainLayout: React.FC = () => {
   const [quoteModalOpen, setQuoteModalOpen] = useState<boolean>(false);
   const [quoteProduct, setQuoteProduct] = useState<Product | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [adminOrdersOpen, setAdminOrdersOpen] = useState<boolean>(false);
 
   // Scroll to top whenever page changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage, selectedProduct]);
 
-  // Global Keyboard shortcut for Search (⌘K / Ctrl+K)
+  // Global Keyboard shortcuts: Search (⌘K / Ctrl+K), Fulfillment Desk (Ctrl+Shift+O)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setSearchModalOpen(true);
+      } else if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'O' || e.key === 'o')) {
+        e.preventDefault();
+        setAdminOrdersOpen(prev => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -53,6 +58,10 @@ const MainLayout: React.FC = () => {
   }, []);
 
   const handleNavigate = (page: string, param?: string) => {
+    if (page === 'admin-orders') {
+      setAdminOrdersOpen(true);
+      return;
+    }
     if (page === 'shop') {
       if (param) {
         setShopCategory(param);
@@ -137,6 +146,12 @@ const MainLayout: React.FC = () => {
         }}
       />
 
+      {/* Admin Central Orders & Fulfillment Modal */}
+      <AdminOrdersModal
+        isOpen={adminOrdersOpen}
+        onClose={() => setAdminOrdersOpen(false)}
+      />
+
       {/* Main Content Router */}
       <main className="flex-1">
         {currentPage === 'home' && (
@@ -202,7 +217,10 @@ const MainLayout: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <Footer onNavigate={handleNavigate} />
+      <Footer
+        onNavigate={handleNavigate}
+        onOpenAdminOrders={() => setAdminOrdersOpen(true)}
+      />
     </div>
   );
 };

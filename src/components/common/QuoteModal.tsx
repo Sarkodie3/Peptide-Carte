@@ -93,7 +93,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
               Inquiry Registered Successfully
             </h4>
             <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-              Thank you, <strong>{name}</strong>. Your inquiry has been routed directly to our fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. A laboratory sales specialist will review your request for <strong>{quantity} vials</strong> of {product.name} and deliver an official quotation and batch COA package to <strong>{email}</strong> within 1–2 business hours.
+              Thank you, <strong>{name}</strong>. Your inquiry has been routed directly to our fulfillment desk at <strong className="text-brand-900">{ADMIN_EMAIL}</strong>. A laboratory sales specialist will review your request for <strong>{quantity} vials</strong> of {product.name} and deliver an official quotation and batch COA package within 1–2 business hours.
             </p>
             <div className="p-3 bg-brand-50 rounded-xl text-xs text-brand-900 border border-brand-100">
               Reference Inquiry ID: <strong className="font-mono">REQ-{Math.floor(100000 + Math.random() * 900000)}</strong>
