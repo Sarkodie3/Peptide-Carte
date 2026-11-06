@@ -306,9 +306,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 <p>Please send an Interac e-Transfer for <strong className="font-mono text-sm">{formatPrice(generatedOrder.finalTotal)} CAD</strong> to our automated fulfillment deposit recipient:</p>
                 <div className="p-4 bg-white rounded-xl border border-brand-200 font-mono text-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span>Recipient Email: <strong>payments@peptidecart.is</strong></span>
+                    <span>Recipient Email: <strong>{ADMIN_EMAIL}</strong></span>
                     <button
-                      onClick={() => copyToClipboard('payments@peptidecart.is')}
+                      onClick={() => copyToClipboard(ADMIN_EMAIL)}
                       className="text-[11px] font-sans font-bold text-brand-800 hover:underline flex items-center gap-1"
                     >
                       <Copy className="w-3 h-3" />
